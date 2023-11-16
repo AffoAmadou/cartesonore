@@ -1,4 +1,4 @@
-// File: /Users/affoamadou/Desktop/cartesonore/app/page.jsx
+// File: /Users/christelleboquillion/Gobelins/cartesonore/app/page.jsx
 import * as entry from '../../../app/page.js'
 import type { ResolvingMetadata } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
