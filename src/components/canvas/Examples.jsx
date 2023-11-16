@@ -70,7 +70,7 @@ export function Dog(props) {
 
 //Castle model
 export function Castle(props) {
-  const { scene } = useGLTF('/castle.glb')
+  const { scene } = useGLTF('/castle_texture.glb')
 
   return <primitive object={scene} {...props} />
 }
