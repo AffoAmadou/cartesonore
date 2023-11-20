@@ -3,9 +3,8 @@
 import { Stats } from '@react-three/drei'
 import dynamic from 'next/dynamic'
 import { Suspense, useState } from 'react'
-
-import { useState } from 'react'
 import play from '../public/img/play.png'
+
 const Logo = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Logo), { ssr: false })
 const Dog = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Dog), { ssr: false })
 const Castle = dynamic(() => import('@/components/canvas/Castle').then((mod) => mod.Castle), { ssr: false })
@@ -31,8 +30,6 @@ const Postcard = dynamic(() => import('@/components/canvas/Examples').then((mod)
 
 const Kitchen = dynamic(() => import('@/components/canvas/Kitchen').then((mod) => mod.Kitchen), { ssr: false })
 
-const Inspector = dynamic(() => import('@/components/Inspector').then((mod) => mod.Inspector), { ssr: false })
- 
 const Raven = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Raven), { ssr: false })
 
 const Cloud = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Cloud), { ssr: false })
@@ -43,19 +40,19 @@ const Scene = dynamic(() => import('@/components/canvas/Examples').then((mod) =>
 export default function Page() {
   return (
     <>
-      < div className="scene absolute" >
-        <div className="intro">
+      <div className='scene absolute'>
+        {/* <div className="intro">
           <div className="intro__wrapper">
             <h1>Chere Lily...</h1>
             <button>
               <img src={play.src} alt="" />
             </button>
           </div>
-        </div>
-        <View orbit className='relative h-full  sm:w-full'>
+        </div> */}
+        <View orbit={false} className='relative h-full  sm:w-full'>
           {/* <fog attach='fog' color="white" near={7} far={10} /> */}
           <Suspense fallback={null}>
-            <fog attach='fog' color="#D4CBB3" near={6} far={16} />
+            <fog attach='fog' color='#D4CBB3' near={6} far={16} />
 
             {/*<Castle scale={.24} position={[0, -2, -3]} rotation={[0.0, 1.5, 0]} />  */}
             {/* <Postcard /> */}
@@ -85,7 +82,7 @@ export default function Page() {
             <Common color={'#a05dcf'} />
           </Suspense>
         </View>
-      </div >
+      </div>
     </>
   )
 }
