@@ -3,6 +3,8 @@
 import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
 
+import { useState } from 'react'
+import play from '../public/img/play.png'
 const Logo = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Logo), { ssr: false })
 const Dog = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Dog), { ssr: false })
 const Castle = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Castle), { ssr: false })
@@ -26,68 +28,63 @@ const Common = dynamic(() => import('@/components/canvas/View').then((mod) => mo
 
 const Postcard = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Postcard), { ssr: false })
 
+const Raven = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Raven), { ssr: false })
+
+const Cloud = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Cloud), { ssr: false })
+const Sky = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Sky), { ssr: false })
+
+const Scene = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Scene), { ssr: false })
+
+
+
 export default function Page() {
   return (
     <>
-      {/* <div className='mx-auto flex w-full flex-col flex-wrap items-center md:flex-row  lg:w-4/5'>
-        {/* jumbo 
-      <div className='flex w-full flex-col items-start justify-center p-12 text-center md:w-2/5 md:text-left'>
-        <p className='w-full uppercase'>Next + React Three Fiber</p>
-        <h1 className='my-4 text-5xl font-bold leading-tight'>Next 3D Starter</h1>
-        <p className='mb-8 text-2xl leading-normal'>A minimalist starter for React, React-three-fiber and Threejs.</p>
-      </div>
-
-      <div className='w-full text-center md:w-3/5'>
-        <View className='flex h-96 w-full flex-col items-center justify-center'>
-          <Suspense fallback={null}>
-            <Logo route='/blob' scale={0.6} position={[0, 0, 0]} />
-            <Common />
-          </Suspense>
-        </View>
-      </div>
-    </div > 
-  {/* <div className='mx-auto flex w-full flex-col flex-wrap items-center p-12 md:flex-row  lg:w-4/5'>
-        {/* first row 
-  {/* <div className='relative h-48 w-full py-6 sm:w-1/2 md:my-12 md:mb-40'>
-          <h2 className='mb-3 text-3xl font-bold leading-none text-gray-800'>Events are propagated</h2>
-          <p className='mb-8 text-gray-600'>Drag, scroll, pinch, and rotate the canvas to explore the 3D scene.</p>
-        </div> 
-  {/* <div className='relative my-12 h-48 w-full py-6 sm:w-1/2 md:mb-40'>
-          <View orbit className='relative h-full  sm:h-48 sm:w-full'>
-            <Suspense fallback={null}>
-              <Dog scale={2} position={[0, -1.6, 0]} rotation={[0.0, -0.3, 0]} />
-              <Common color={'lightpink'} />
-            </Suspense>
-          </View>
-        </div> 
-  {/* second row
-  {/* <div className='relative my-12 h-48 w-full py-6 sm:w-1/2 md:mb-40'>
-          <View orbit className='relative h-full animate-bounce sm:h-48 sm:w-full'>
-            <Suspense fallback={null}>
-              <Duck route='/blob' scale={2} position={[0, -1.6, 0]} />
-              <Common color={'lightblue'} />
-            </Suspense>
-          </View>
-        </div> 
-  {/* <div className='w-full p-6 sm:w-1/2'>
-          <h2 className='mb-3 text-3xl font-bold leading-none text-gray-800'>Dom and 3D are synchronized</h2>
-          <p className='mb-8 text-gray-600'>
-            3D Divs are renderer through the View component. It uses gl.scissor to cut the viewport into segments. You
-            tie a view to a tracking div which then controls the position and bounds of the viewport. This allows you to
-            have multiple views with a single, performant canvas. These views will follow their tracking elements,
-            scroll along, resize, etc.
-          </p>
-        </div> 
-      </div > */}
       < div className="scene absolute" >
+        <div className="intro">
+          <div className="intro__wrapper">
+            <h1>Chere Lily...</h1>
+            <button>
+              <img src={play.src} alt="" />
+            </button>
+          </div>
+        </div>
         <View orbit className='relative h-full  sm:w-full'>
+          {/* <fog attach='fog' color="white" near={7} far={10} /> */}
           <Suspense fallback={null}>
-            <Postcard />
-            <Castle scale={.2} position={[0, -.6, -2]} rotation={[0.0, 1.5, 0]} />
-            <Common color={'lightpink'} />
+            <fog attach='fog' color="#D4CBB3" near={6} far={16} />
+
+            {/*<Castle scale={.24} position={[0, -2, -3]} rotation={[0.0, 1.5, 0]} />  */}
+            {/* <Postcard /> */}
+            {/* <Raven /> */}
+            <Scene />
+            {/* <Sky /> */}
+            {/* bas */}
+            {/* <Cloud image="1" position={[-2.6, -1.9, 0]} size={{ width: 4, height: 2 }} />
+            <Cloud image="2" position={[.1, -2.2, 0]} size={{ width: 3.3, height: 1.8 }} />
+            <Cloud image="0" position={[2, -1.6, 1]} size={{ width: 2.8, height: 1.6 }} /> */}
+
+            {/* middle*/}
+            {/* <Cloud image="2" position={[-5, -2, -4]} size={{ width: 5.83, height: 3 }} />
+            <Cloud image="1" position={[0, -1.4, -4]} size={{ width: 6, height: 4 }} />
+            <Cloud image="0" position={[5.4, -2, -4]} size={{ width: 5.83, height: 3.8 }} />
+            <Cloud image="1" position={[2.6, -.65, -4.3]} size={{ width: 7, height: 4 }} /> */}
+
+            {/* top */}
+            {/* <Cloud image="0" position={[-5.5, -1, -6]} size={{ width: 7.3, height: 4.3 }} />
+            <Cloud image="2" position={[-.1, -.3, -5]} size={{ width: 8, height: 5 }} />
+ */}
+
+            {/* far*/}
+            {/* <Cloud image="2" position={[9, .4, -13]} size={{ width: 8.83, height: 8 }} />
+            <Cloud image="1" position={[-7, .8, -9]} size={{ width: 5.83, height: 5 }} /> */}
+
+            <Common color={'#a05dcf'} />
           </Suspense>
         </View>
       </div >
+
+
     </>
   )
 }
