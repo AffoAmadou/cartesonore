@@ -1,7 +1,8 @@
 'use client'
 
+import { Stats } from '@react-three/drei'
 import dynamic from 'next/dynamic'
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 
 const Logo = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Logo), { ssr: false })
 const Dog = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Dog), { ssr: false })
@@ -26,11 +27,18 @@ const Common = dynamic(() => import('@/components/canvas/View').then((mod) => mo
 
 const Postcard = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Postcard), { ssr: false })
 
-export default function Page() {
+const Kitchen = dynamic(() => import('@/components/canvas/Kitchen').then((mod) => mod.Kitchen), { ssr: false })
+
+const Inspector = dynamic(() => import('@/components/Inspector').then((mod) => mod.Inspector), { ssr: false })
+
+export default function Page() {  
+  const [rotation, setRotation] = useState(true)
+  const [scene2D, setScene2D] = useState({display: false, name: ""});
+  
   return (
     <>
-      {/* <div className='mx-auto flex w-full flex-col flex-wrap items-center md:flex-row  lg:w-4/5'>
-        {/* jumbo 
+    {/*  <div className='mx-auto flex w-full flex-col flex-wrap items-center md:flex-row  lg:w-4/5'>
+        jumbo 
       <div className='flex w-full flex-col items-start justify-center p-12 text-center md:w-2/5 md:text-left'>
         <p className='w-full uppercase'>Next + React Three Fiber</p>
         <h1 className='my-4 text-5xl font-bold leading-tight'>Next 3D Starter</h1>
@@ -46,13 +54,13 @@ export default function Page() {
         </View>
       </div>
     </div > 
-  {/* <div className='mx-auto flex w-full flex-col flex-wrap items-center p-12 md:flex-row  lg:w-4/5'>
-        {/* first row 
-  {/* <div className='relative h-48 w-full py-6 sm:w-1/2 md:my-12 md:mb-40'>
+   <div className='mx-auto flex w-full flex-col flex-wrap items-center p-12 md:flex-row  lg:w-4/5'>
+        first row 
+  <div className='relative h-48 w-full py-6 sm:w-1/2 md:my-12 md:mb-40'>
           <h2 className='mb-3 text-3xl font-bold leading-none text-gray-800'>Events are propagated</h2>
           <p className='mb-8 text-gray-600'>Drag, scroll, pinch, and rotate the canvas to explore the 3D scene.</p>
         </div> 
-  {/* <div className='relative my-12 h-48 w-full py-6 sm:w-1/2 md:mb-40'>
+  <div className='relative my-12 h-48 w-full py-6 sm:w-1/2 md:mb-40'>
           <View orbit className='relative h-full  sm:h-48 sm:w-full'>
             <Suspense fallback={null}>
               <Dog scale={2} position={[0, -1.6, 0]} rotation={[0.0, -0.3, 0]} />
@@ -60,8 +68,8 @@ export default function Page() {
             </Suspense>
           </View>
         </div> 
-  {/* second row
-  {/* <div className='relative my-12 h-48 w-full py-6 sm:w-1/2 md:mb-40'>
+   second row
+  <div className='relative my-12 h-48 w-full py-6 sm:w-1/2 md:mb-40'>
           <View orbit className='relative h-full animate-bounce sm:h-48 sm:w-full'>
             <Suspense fallback={null}>
               <Duck route='/blob' scale={2} position={[0, -1.6, 0]} />
@@ -69,7 +77,7 @@ export default function Page() {
             </Suspense>
           </View>
         </div> 
-  {/* <div className='w-full p-6 sm:w-1/2'>
+   <div className='w-full p-6 sm:w-1/2'>
           <h2 className='mb-3 text-3xl font-bold leading-none text-gray-800'>Dom and 3D are synchronized</h2>
           <p className='mb-8 text-gray-600'>
             3D Divs are renderer through the View component. It uses gl.scissor to cut the viewport into segments. You
@@ -78,16 +86,32 @@ export default function Page() {
             scroll along, resize, etc.
           </p>
         </div> 
-      </div > */}
-      < div className="scene absolute" >
-        <View orbit className='relative h-full  sm:w-full'>
+      </div >  */}
+
+      <div className="scene absolute" >
+        <View orbit={false} className='relative h-full sm:w-full'>
           <Suspense fallback={null}>
+
+            {scene2D.display && (
+              <mesh position={[1, 1, 0.5]} onClick={() => setScene2D({name: "kitchen", display: true})}>
+                <planeGeometry args={[1, 0.5, 64, 64]} />
+                <meshBasicMaterial attach="material" opacity={1} transparent color={0xffff00} />
+              </mesh>
+            )}
+
+            {scene2D.display && scene2D.name === "kitchen" && (
+              <Kitchen />
+            )}
+
             <Postcard />
-            <Castle scale={.2} position={[0, -.6, -2]} rotation={[0.0, 1.5, 0]}  />
+            <Inspector rotation={rotation}>
+              <Castle scale={.2} position={[0, -.6, -2]} rotation={[0.0, 1.5, 0]} setRotation={setRotation} scene2D={scene2D} setScene2D={setScene2D} />
+            </Inspector>
             <Common color={'lightpink'} />
+            <Stats />
           </Suspense>
         </View>
-      </div >
+      </div> 
     </>
   )
 }
