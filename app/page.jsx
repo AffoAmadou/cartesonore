@@ -1,13 +1,14 @@
 'use client'
 
+import { Stats } from '@react-three/drei'
 import dynamic from 'next/dynamic'
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 
 import { useState } from 'react'
 import play from '../public/img/play.png'
 const Logo = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Logo), { ssr: false })
 const Dog = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Dog), { ssr: false })
-const Castle = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Castle), { ssr: false })
+const Castle = dynamic(() => import('@/components/canvas/Castle').then((mod) => mod.Castle), { ssr: false })
 const Duck = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Duck), { ssr: false })
 const View = dynamic(() => import('@/components/canvas/View').then((mod) => mod.View), {
   ssr: false,
@@ -28,14 +29,16 @@ const Common = dynamic(() => import('@/components/canvas/View').then((mod) => mo
 
 const Postcard = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Postcard), { ssr: false })
 
+const Kitchen = dynamic(() => import('@/components/canvas/Kitchen').then((mod) => mod.Kitchen), { ssr: false })
+
+const Inspector = dynamic(() => import('@/components/Inspector').then((mod) => mod.Inspector), { ssr: false })
+ 
 const Raven = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Raven), { ssr: false })
 
 const Cloud = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Cloud), { ssr: false })
 const Sky = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Sky), { ssr: false })
 
 const Scene = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Scene), { ssr: false })
-
-
 
 export default function Page() {
   return (
@@ -83,8 +86,6 @@ export default function Page() {
           </Suspense>
         </View>
       </div >
-
-
     </>
   )
 }
