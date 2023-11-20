@@ -1,101 +1,135 @@
 'use client'
 
-import { useGLTF } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
+import { useGLTF, shaderMaterial } from '@react-three/drei'
+import { useFrame, useLoader, extend } from '@react-three/fiber'
 import * as THREE from 'three'
-import { useMemo, useRef, useState, useEffect } from 'react'
-import { Line, useCursor, MeshDistortMaterial } from '@react-three/drei'
-import { useRouter } from 'next/navigation'
+import { useRef, useEffect } from 'react'
+import { PositionalAudio } from '@react-three/drei'
+import GSAP from 'gsap'
 
-export const Blob = ({ route = '/', ...props }) => {
-  const router = useRouter()
-  const [hovered, hover] = useState(false)
-  useCursor(hovered)
-  return (
-    <mesh
-      onClick={() => router.push(route)}
-      onPointerOver={() => hover(true)}
-      onPointerOut={() => hover(false)}
-      {...props}>
-      <sphereGeometry args={[1, 64, 64]} />
-      <MeshDistortMaterial roughness={0} color={hovered ? 'hotpink' : '#1fb2f5'} />
-    </mesh>
-  )
-}
+import sound from "../../../public/sound/crow.mp3"
 
-export const Logo = ({ route = '/blob', ...props }) => {
-  const mesh = useRef(null)
-  const router = useRouter()
 
-  const [hovered, hover] = useState(false)
-  const points = useMemo(() => new THREE.EllipseCurve(0, 0, 3, 1.15, 0, 2 * Math.PI, false, 0).getPoints(100), [])
-
-  useCursor(hovered)
-  useFrame((state, delta) => {
-    const t = state.clock.getElapsedTime()
-    mesh.current.rotation.y = Math.sin(t) * (Math.PI / 8)
-    mesh.current.rotation.x = Math.cos(t) * (Math.PI / 8)
-    mesh.current.rotation.z -= delta / 4
-  })
-
-  return (
-    <group ref={mesh} {...props}>
-      {/* @ts-ignore */}
-      <Line worldUnits points={points} color='#1fb2f5' lineWidth={0.15} />
-      {/* @ts-ignore */}
-      <Line worldUnits points={points} color='#1fb2f5' lineWidth={0.15} rotation={[0, 0, 1]} />
-      {/* @ts-ignore */}
-      <Line worldUnits points={points} color='#1fb2f5' lineWidth={0.15} rotation={[0, 0, -1]} />
-      <mesh onClick={() => router.push(route)} onPointerOver={() => hover(true)} onPointerOut={() => hover(false)}>
-        <sphereGeometry args={[0.55, 64, 64]} />
-        <meshPhysicalMaterial roughness={0} color={hovered ? 'hotpink' : '#1fb2f5'} />
-      </mesh>
-    </group>
-  )
-}
-
-export function Duck(props) {
-  const { scene } = useGLTF('/duck.glb')
-
-  useFrame((state, delta) => (scene.rotation.y += delta))
-
-  return <primitive object={scene} {...props} />
-}
-export function Dog(props) {
-  const { scene } = useGLTF('/dog.glb')
-
-  return <primitive object={scene} {...props} />
-}
-
+import { Postcard } from './objects/Postcard'
+import { Sky } from './objects/Sky'
+import { Castle } from './objects/Castle'
+import { Intro } from './objects/Intro'
+import { Cloud } from './objects/Cloud'
 
 //Castle model
-export function Castle(props) {
-  const { scene } = useGLTF('/castle_texture.glb')
-
-  return <primitive object={scene} {...props} />
-}
 
 
-//!Postal card model
+//Raven model
+// export function RavenModel(props) {
+//   const { scene } = useGLTF('/raven.glb')
 
-export const Postcard = () => {
+//   return <primitive object={scene} {...props} />
+// }
+
+
+// //!Raven 
+// export const Raven = () => {
+//   const soundref = useRef(null)
+
+//   const playSound = () => {
+//     if (soundref.current) {
+//       soundref.current.play();
+//     }
+//   };
+//   return (
+//     <RavenModel onClick={playSound} position={[-6, 2, -10]}>
+//       <PositionalAudio
+//         url={sound}
+//         distance={1}
+//         ref={soundref}
+//       />
+//     </RavenModel>
+//   )
+// }
+
+// export const SkyShaderMaterial = shaderMaterial(
+//   {
+//     uTime: 0.0,
+//     uColor: new THREE.Color(0xD3B1E7),
+//     uBColor: new THREE.Color(0xFDFFEB),
+//   },
+//   // vertex shader
+//   /*glsl*/`
+//   varying vec2 vUv;
+//     varying float vWave;
+
+//     uniform float uTime;
+
+//     void main() {
+//       vUv = uv;
+//       vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+//       gl_Position = projectionMatrix * viewMatrix * worldPosition;  
+//     }
+//   `,
+//   // fragment shader
+//   /*glsl*/`
+//   uniform vec3 uColor;
+//     uniform float uTime;
+//     uniform sampler2D uTextureOne;
+// uniform vec3 uBColor;
+//     varying vec2 vUv;
+//     varying float vWave;
+
+//     void main() {
+
+// // vec3 color = mix(uColor, uBColor, vUv.y);
+//  vec3 color = mix(uColor, uBColor,vUv.y);
+//       gl_FragColor = vec4(color, 1.0);
+// }
+//   `,
+
+// )
+// SkyShaderMaterial.transparent = true
+// SkyShaderMaterial.depthWrite = false
+// extend({ SkyShaderMaterial });
+
+
+//!Scene Output scene
+export const Scene = () => {
   const meshref = useRef(null)
 
-
-
   useFrame(({ clock }) => {
-    meshref.current.uTime = clock.getElapsedTime();
   });
 
   useEffect(() => {
+
   }, [])
+
+
 
   return (
     <>
-      <mesh ref={meshref} position={[0, .13, -3]}>
-        <planeGeometry args={[3, 2.6, 64, 64]} />
-        <meshBasicMaterial attach="material" opacity={1} transparent />
-      </mesh>
+      <group position={[0, 0, 0]}>
+        <Postcard />
+        <Intro />
+        <Sky />
+        <Castle scale={.24} position={[0, -2, -3]} rotation={[0.0, 1.5, 0]} />
+        <Cloud image="1" position={[-2.6, -1.9, 0]} size={{ width: 4, height: 2 }} />
+        <Cloud image="2" position={[.1, -2.2, 0]} size={{ width: 3.3, height: 1.8 }} />
+        <Cloud image="0" position={[2, -1.6, 1]} size={{ width: 2.8, height: 1.6 }} />
+
+        {/* middle*/}
+        <Cloud image="2" position={[-5, -2, -4]} size={{ width: 5.83, height: 3 }} />
+        <Cloud image="1" position={[0, -1.4, -4]} size={{ width: 6, height: 4 }} />
+        <Cloud image="0" position={[5.4, -2, -4]} size={{ width: 5.83, height: 3.8 }} />
+        <Cloud image="1" position={[2.6, -.65, -4.3]} size={{ width: 7, height: 4 }} />
+
+
+        {/* top */}
+        <Cloud image="0" position={[-5.5, -1, -6]} size={{ width: 7.3, height: 4.3 }} />
+        <Cloud image="2" position={[-.1, -.3, -5]} size={{ width: 8, height: 5 }} />
+
+
+        {/* far*/}
+        <Cloud image="2" position={[9, .4, -13]} size={{ width: 8.83, height: 8 }} />
+        <Cloud image="1" position={[-7, .8, -9]} size={{ width: 5.83, height: 5 }} />
+
+      </group >
     </>
   )
 }
