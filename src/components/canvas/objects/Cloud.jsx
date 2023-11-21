@@ -3,14 +3,16 @@
 import { useGLTF, shaderMaterial } from '@react-three/drei'
 import { useFrame, useLoader, extend } from '@react-three/fiber'
 import * as THREE from 'three'
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import nuage from "../../../../public/img/nuages.png"
 import nuage1 from "../../../../public/img/nuage1.png"
 import nuage2 from "../../../../public/img/nuage2.png"
 import GSAP from 'gsap'
 
+
 //!Clouds
-export const Cloud = ({ image, position, size }) => {
+export const Cloud = ({ image, position, size, second = false }) => {
+  const [isCreated, setIsCreated] = useState(false)
   let texture = useLoader(THREE.TextureLoader, nuage.src)
   let texturetwo = useLoader(THREE.TextureLoader, nuage1.src)
   let texturethree = useLoader(THREE.TextureLoader, nuage2.src)
@@ -18,34 +20,80 @@ export const Cloud = ({ image, position, size }) => {
   let textures = [texture, texturetwo, texturethree]
 
   textures = textures.map((texture) => {
-    texture.encoding = THREE.LinearSRGBColorSpace;
+    texture.colorSpace = THREE.LinearSRGBColorSpace;
     return texture;
   });
 
   let meshref = useRef(null)
   useEffect(() => {
-    let tl = GSAP.timeline({
-      ease: 'ease.in',
-      repeat: -1,
-    });
+    if (!isCreated) {
+      if (second) {
+        let meshcurrentZ = meshref.current.position.z
+        let tl = GSAP.timeline({
+          ease: "expo.inOut"
+        });
 
-    // Scale up
-    tl.to(meshref.current.scale, {
-      duration: 4.5,
-      x: 1.3,
-      y: 1.3,
-      z: 1.3,
-    });
+        meshref.current.position.z = -1;
+        tl.fromTo(meshref.current.scale, {
+          duration: 1,
+          x: 0.2,
+          y: 0.2,
+          z: 0.2,
+        }, {
+          duration: 1,
+          x: 1,
+          y: 1,
+          z: 1,
+          onComplete: () => {
+            setIsCreated(true)
+          }
+        });
 
-    // Scale down
-    tl.to(meshref.current.scale, {
-      duration: 4.5,
-      x: 1,
-      y: 1,
-      z: 1,
-    },);
+        tl.to(meshref.current.position, {
+          duration: 3,
+          z: meshcurrentZ,
+        })
+      }
+      else {
+        GSAP.fromTo(meshref.current.scale, {
+          duration: 1,
+          x: 0.2,
+          y: 0.2,
+          z: 0.2,
+        }, {
+          duration: 1,
+          x: 1,
+          y: 1,
+          z: 1,
+          onComplete: () => {
+            setIsCreated(true)
+          }
+        });
+      }
+    }
+    else {
+      let tl = GSAP.timeline({
+        ease: 'ease.in',
+        repeat: -1,
+      });
 
-  }, [])
+      // Scale up
+      tl.to(meshref.current.scale, {
+        duration: 4.5,
+        x: 1.3,
+        y: 1.3,
+        z: 1.3,
+      });
+
+      // Scale down
+      tl.to(meshref.current.scale, {
+        duration: 4.5,
+        x: 1,
+        y: 1,
+        z: 1,
+      },);
+    }
+  }, [isCreated])
 
 
   return (
@@ -111,4 +159,5 @@ export const CloudShaderMaterial = shaderMaterial(
 )
 CloudShaderMaterial.transparent = true
 CloudShaderMaterial.depthWrite = false
+CloudShaderMaterial.alphaTest = 0.5
 extend({ CloudShaderMaterial });

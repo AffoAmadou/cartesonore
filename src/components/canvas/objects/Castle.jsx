@@ -92,9 +92,9 @@ export const Castle = (props) => {
         {...props}
         onPointerOver={(e) => handleHover(e)}
         onPointerOut={handleNonHover}
-        onClick={(e) => {
-          zoomToView(e)
-        }}
+        // onClick={(e) => {
+        //   zoomToView(e)
+        // }}
         onPointerMissed={() => setZoom(false)}
       />
       <mesh ref={ghostMesh} />

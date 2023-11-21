@@ -2,13 +2,13 @@
 
 import { Stats } from '@react-three/drei'
 import dynamic from 'next/dynamic'
-import { Suspense, useState } from 'react'
-import play from '../public/img/play.png'
+import { Suspense, useEffect, useState } from 'react'
+import Play from './components/play'
+import Lottie from 'react-lottie'
+import intros from '../public/intros.json'
+import chere from '../public/chere.json'
+import GSAP from 'gsap'
 
-const Logo = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Logo), { ssr: false })
-const Dog = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Dog), { ssr: false })
-const Castle = dynamic(() => import('@/components/canvas/Castle').then((mod) => mod.Castle), { ssr: false })
-const Duck = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Duck), { ssr: false })
 const View = dynamic(() => import('@/components/canvas/View').then((mod) => mod.View), {
   ssr: false,
   loading: () => (
@@ -26,63 +26,99 @@ const View = dynamic(() => import('@/components/canvas/View').then((mod) => mod.
 })
 const Common = dynamic(() => import('@/components/canvas/View').then((mod) => mod.Common), { ssr: false })
 
-const Postcard = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Postcard), { ssr: false })
-
-const Kitchen = dynamic(() => import('@/components/canvas/Kitchen').then((mod) => mod.Kitchen), { ssr: false })
-
-const Raven = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Raven), { ssr: false })
-
-const Cloud = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Cloud), { ssr: false })
-const Sky = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Sky), { ssr: false })
-
 const Scene = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Scene), { ssr: false })
 
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: intros,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice"
+  }
+};
+
+const chereOptions = {
+
+  // loop: true,
+  autoplay: true,
+  animationData: chere,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice"
+  }
+};
+
+
 export default function Page() {
+  const [isIntroClicked, setIsIntroClicked] = useState(false)
+  const [isStarted, setIsStarted] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(0)
+  const [fogColor, setFogColor] = useState('#ffCBB3')
+
+  // b3c3ff
+  //ffCBB3
+  //5caeb1
+  const colors = ['#b3c3ff', '#ffCBB3', '#5caeb1'];
+  const handleIntroClick = () => {
+    setIsIntroClicked(true)
+    setIsStarted(true)
+  }
+
+  useEffect(() => {
+    // Function to change the color
+    // const changeColor = (color) => {
+    //   setFogColor(color);
+    // };
+
+    // // Create a GSAP timeline
+    // let tl = GSAP.timeline({ repeat: -1 });
+
+    // // Schedule color changes
+    // colors.forEach(color => {
+    //   tl.to({}, { duration: 30, onStart: () => changeColor(color) });
+
+
+  });
+
+
   return (
     <>
       <div className='scene absolute'>
-        {/* <div className="intro">
-          <div className="intro__wrapper">
-            <h1>Chere Lily...</h1>
-            <button>
-              <img src={play.src} alt="" />
-            </button>
-          </div>
-        </div> */}
+
         <View orbit={false} className='relative h-full  sm:w-full'>
           {/* <fog attach='fog' color="white" near={7} far={10} /> */}
           <Suspense fallback={null}>
-            <fog attach='fog' color='#D4CBB3' near={6} far={16} />
-
-            {/*<Castle scale={.24} position={[0, -2, -3]} rotation={[0.0, 1.5, 0]} />  */}
-            {/* <Postcard /> */}
-            {/* <Raven /> */}
-            <Scene />
-            {/* <Sky /> */}
-            {/* bas */}
-            {/* <Cloud image="1" position={[-2.6, -1.9, 0]} size={{ width: 4, height: 2 }} />
-            <Cloud image="2" position={[.1, -2.2, 0]} size={{ width: 3.3, height: 1.8 }} />
-            <Cloud image="0" position={[2, -1.6, 1]} size={{ width: 2.8, height: 1.6 }} /> */}
-
-            {/* middle*/}
-            {/* <Cloud image="2" position={[-5, -2, -4]} size={{ width: 5.83, height: 3 }} />
-            <Cloud image="1" position={[0, -1.4, -4]} size={{ width: 6, height: 4 }} />
-            <Cloud image="0" position={[5.4, -2, -4]} size={{ width: 5.83, height: 3.8 }} />
-            <Cloud image="1" position={[2.6, -.65, -4.3]} size={{ width: 7, height: 4 }} /> */}
-
-            {/* top */}
-            {/* <Cloud image="0" position={[-5.5, -1, -6]} size={{ width: 7.3, height: 4.3 }} />
-            <Cloud image="2" position={[-.1, -.3, -5]} size={{ width: 8, height: 5 }} />
- */}
-
-            {/* far*/}
-            {/* <Cloud image="2" position={[9, .4, -13]} size={{ width: 8.83, height: 8 }} />
-            <Cloud image="1" position={[-7, .8, -9]} size={{ width: 5.83, height: 5 }} /> */}
-
-            <Common color={'#a05dcf'} />
+            <fog attach='fog' color={fogColor} near={6} far={16} />
+            <Scene setIsStarted={setIsStarted} isStarted={isStarted} isPlaying={isPlaying} />
+            <Common color={'#000000'} />
           </Suspense>
         </View>
       </div>
     </>
   )
 }
+
+
+
+// {
+//   !isIntroClicked &&
+//     <div className="intro">
+//       <div className="intro__wrapper">
+//         <h1>Chere Lily...</h1>
+//         <Play />
+
+//         <Lottie
+//           options={chereOptions}
+//           height={350}
+//           width={350}
+//         />
+//         <button onClick={handleIntroClick}>
+//           <Lottie
+//             options={defaultOptions}
+//             height={350}
+//             width={350}
+//           />
+//         </button>
+
+//       </div>
+//     </div>
+// }
