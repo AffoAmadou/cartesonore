@@ -18,7 +18,6 @@ export const Castle = (props) => {
   const positionVec = new THREE.Vector3(0, 0, 6)
   const lookatVec = new THREE.Vector3(0, 0, 0)
 
-
   const handleHover = (e) => {
     if (props.scene2D) return
 
@@ -47,8 +46,6 @@ export const Castle = (props) => {
   const state = useThree((state) => state)
 
   useEffect(() => {
-    props.setIsLily(true)
-
     if (props.zoom) {
       if (selectedObject.name === 'chambre1') {
         positionVec.set(-0.6, -0.3, 0)
@@ -66,7 +63,9 @@ export const Castle = (props) => {
       duration: 1,
       ease: 'power2.out',
       onComplete: () => {
-        if (props.zoom) props.setScene2D('kitchen')
+        if (props.zoom) {
+          selectedObject.name === 'chambre1' ? props.setScene2D('bedroom') : props.setScene2D('kitchen')
+        }
       },
     })
 
@@ -91,11 +90,9 @@ export const Castle = (props) => {
         {...props}
         onPointerOver={(e) => handleHover(e)}
         onPointerOut={handleNonHover}
-
         onClick={(e) => {
           zoomToView(e)
         }}
-
       />
     </>
   )
