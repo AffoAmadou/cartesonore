@@ -59,8 +59,9 @@ export const Intro = () => {
 
         <PositionalAudio
           url={sound}
-          distance={10}
+          distance={1}
           ref={soundref}
+          loopEnd={1}
         />
       </mesh>
     </>
