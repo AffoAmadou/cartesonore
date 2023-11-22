@@ -163,7 +163,7 @@ export const Postcard = ({ isStarted, isPlaying, setFirstClouds, setIsStarted, s
                 duration: 1.4,
                 opacity: 0,
                 onComplete: () => {
-                  setIsStarted(false)
+                  setIsPostcard(false)
                 }
 
               })
