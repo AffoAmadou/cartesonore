@@ -3,7 +3,7 @@
 import * as THREE from 'three'
 import { useTexture } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { Pseudo3DShaderMaterial } from './Pseudo3DShaderMaterial'
 import GSAP from 'gsap'
 
@@ -31,7 +31,7 @@ export const Kitchen = (props) => {
 
   useFrame((state) => (depthMaterial.current.uMouse = [state.pointer.x * 0.01, state.pointer.y * 0.01]))
 
-  useFrame((state) => {
+  /*  useFrame((state) => {
     let ang_rad = (state.camera.fov * Math.PI) / 180
     let fov_y = state.camera.position.z * Math.tan(ang_rad / 2) * 1
 
@@ -52,7 +52,30 @@ export const Kitchen = (props) => {
     )
 
     props.timeline.add(scaleMesh, 0)
-  })
+  }) */
+
+  useEffect(() => {
+    let ang_rad = (state.camera.fov * Math.PI) / 180
+    let fov_y = state.camera.position.z * Math.tan(ang_rad / 2) * 1
+
+    let scaleMesh = GSAP.fromTo(
+      meshRef.current.scale,
+      {
+        x: 0,
+        y: 0,
+        z: 0,
+      },
+      {
+        x: width,
+        y: height,
+        z: 1,
+        duration: 1,
+        ease: 'power2.out',
+      },
+    )
+
+    props.timeline.add(scaleMesh, 0)
+  }, [])
 
   return (
     <mesh
@@ -62,7 +85,7 @@ export const Kitchen = (props) => {
         props.setScene2D(null)
         props.setZoom(false)
       }}
-      scale={meshScale}
+      scale={[1, 1, 1]}
     >
       <planeGeometry ref={geometryRef} />
       <pseudo3DShaderMaterial
