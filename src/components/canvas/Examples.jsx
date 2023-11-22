@@ -59,18 +59,23 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
         )}
 
         {isCastle && (
-          <Castle
-            scale={0.24}
-            position={[0, -2, -3]}
-            rotation={[0.0, 1.5, 0]}
-            scene2D={scene2D}
-            setScene2D={setScene2D}
-            explore={explore}
-            setExplore={setExplore}
-            timeline={timeline}
-            zoom={zoom}
-            setZoom={setZoom}
-          />
+          <>
+            <Castle
+              scale={0.24}
+              position={[0, -2, -3]}
+              rotation={[0.0, 1.5, 0]}
+              scene2D={scene2D}
+              setScene2D={setScene2D}
+              explore={explore}
+              setExplore={setExplore}
+              timeline={timeline}
+              zoom={zoom}
+              setZoom={setZoom}
+              setIsLily={setIsLily}
+            />
+
+            <Lily position={[0, -1.4, 0]} isLily={isLily} />
+          </>
         )}
 
 
