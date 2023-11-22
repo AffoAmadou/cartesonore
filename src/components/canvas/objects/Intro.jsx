@@ -3,7 +3,7 @@ import { useFrame, useLoader, extend } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useEffect, useRef } from 'react'
 import boite from "../../../../public/img/boite.png"
-import noir from "../../../../public/img/noir.png"
+import blanc from "../../../../public/img/blanc.png"
 import disp from "../../../../public/img/disp.jpg"
 import GSAP from 'gsap'
 
@@ -11,7 +11,7 @@ import GSAP from 'gsap'
 
 export const Intro = () => {
   const meshref = useRef(null)
-  let texture = useLoader(THREE.TextureLoader, noir.src)
+  let texture = useLoader(THREE.TextureLoader, blanc.src)
   texture.colorSpace = THREE.LinearSRGBColorSpace;
 
   let texturetwo = useLoader(THREE.TextureLoader, boite.src)

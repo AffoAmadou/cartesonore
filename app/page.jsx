@@ -2,7 +2,7 @@
 
 import { Stats } from '@react-three/drei'
 import dynamic from 'next/dynamic'
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, useEffect, useState, useRef } from 'react'
 import Play from './components/play'
 import Lottie from 'react-lottie'
 import intros from '../public/intros.json'
@@ -52,40 +52,63 @@ export default function Page() {
   const [isIntroClicked, setIsIntroClicked] = useState(false)
   const [isStarted, setIsStarted] = useState(false)
   const [isPlaying, setIsPlaying] = useState(0)
-  const [fogColor, setFogColor] = useState('#ffCBB3')
+  // const [fogColor, setFogColor] = useState('#ffCBB3')
 
-  // b3c3ff
-  //ffCBB3
-  //5caeb1
-  const colors = ['#b3c3ff', '#ffCBB3', '#5caeb1'];
-  const [colorIndex, setColorIndex] = useState(0);
+  // const colors = ['#b3c3ff', '#ffCBB3', '#5caeb1'];
+  // const [colorIndex, setColorIndex] = useState(0);
+
+
   const handleIntroClick = () => {
     setIsIntroClicked(true)
     setIsStarted(true)
   }
 
+  //useEffect(() => {
+
+
+  //With GSAP every 30 seconds, add 1 to the colorIndex state if its=2 then set it to 0
+
+  // const interval = setInterval(() => {
+  //   setColorIndex((colorIndex + 1) % colors.length);
+  //   console.log(colorIndex)
+  // }
+  //   , 30000);
+  // });
+
+
+  const [fogColor, setFogColor] = useState('#ffCBB3');
+  const colors = ['#b3c3ff', '#ffCBB3', '#5caeb1'];
+  const colorIndexRef = useRef(0);
+
   useEffect(() => {
+    const getNextIndex = () => (colorIndexRef.current + 1) % colors.length;
 
+    const animateColorTransition = () => {
+      const nextIndex = getNextIndex();
 
-    //With GSAP every 30 seconds, add 1 to the colorIndex state if its=2 then set it to 0
+      GSAP.to({}, {
+        delay: 15,
+        duration: 15,
+        onUpdate: function () {
+          const newColor = GSAP.utils.interpolate(colors[colorIndexRef.current], colors[nextIndex], this.progress());
+          setFogColor(newColor);
+        },
+        onComplete: () => {
+          colorIndexRef.current = nextIndex;
+          animateColorTransition();
+        }
+      });
+    };
 
-    const interval = setInterval(() => {
-      setColorIndex((colorIndex + 1) % colors.length);
-      console.log(colorIndex)
-    }
-      , 30000);
-
-  });
-
-
+    animateColorTransition();
+  }, []);
   return (
     <>
       <div className='scene absolute'>
 
         <View orbit={false} className='relative h-full  sm:w-full'>
-          {/* <fog attach='fog' color="white" near={7} far={10} /> */}
           <Suspense fallback={null}>
-            <fog attach='fog' color={colors[colorIndex]} near={6} far={16} />
+            <fog attach='fog' color={fogColor} near={6} far={16} />
             <Scene setIsStarted={setIsStarted} isStarted={isStarted} isPlaying={isPlaying} />
             <Common color={'#000000'} />
           </Suspense>
