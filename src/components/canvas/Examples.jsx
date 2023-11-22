@@ -1,7 +1,7 @@
 'use client'
 
-import { useGLTF, shaderMaterial } from '@react-three/drei'
-import { useFrame, useLoader, extend } from '@react-three/fiber'
+import { useGLTF, shaderMaterial, Stats } from '@react-three/drei'
+import { useFrame, useLoader, extend, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useRef, useEffect, useState } from 'react'
 import { PositionalAudio } from '@react-three/drei'
@@ -45,83 +45,45 @@ import { Kitchen } from './Kitchen'
 //   )
 // }
 
-// export const SkyShaderMaterial = shaderMaterial(
-//   {
-//     uTime: 0.0,
-//     uColor: new THREE.Color(0xD3B1E7),
-//     uBColor: new THREE.Color(0xFDFFEB),
-//   },
-//   // vertex shader
-//   /*glsl*/`
-//   varying vec2 vUv;
-//     varying float vWave;
-
-//     uniform float uTime;
-
-//     void main() {
-//       vUv = uv;
-//       vec4 worldPosition = modelMatrix * vec4(position, 1.0);
-//       gl_Position = projectionMatrix * viewMatrix * worldPosition;
-//     }
-//   `,
-//   // fragment shader
-//   /*glsl*/`
-//   uniform vec3 uColor;
-//     uniform float uTime;
-//     uniform sampler2D uTextureOne;
-// uniform vec3 uBColor;
-//     varying vec2 vUv;
-//     varying float vWave;
-
-//     void main() {
-
-// // vec3 color = mix(uColor, uBColor, vUv.y);
-//  vec3 color = mix(uColor, uBColor,vUv.y);
-//       gl_FragColor = vec4(color, 1.0);
-// }
-//   `,
-
-// )
-// SkyShaderMaterial.transparent = true
-// SkyShaderMaterial.depthWrite = false
-// extend({ SkyShaderMaterial });
-
 //!Scene Output scene
 export const Scene = () => {
   const meshref = useRef(null)
 
-  const [rotation, setRotation] = useState(true)
-  const [scene2D, setScene2D] = useState({ display: false, name: '' })
+  const [explore, setExplore] = useState(false)
+  const [scene2D, setScene2D] = useState(false)
+  const [zoom, setZoom] = useState(false)
 
   useFrame(({ clock }) => {})
 
-  useEffect(() => {}, [])
+  const set = useThree((state) => state.set)
+  const state = useThree((state) => state)
+
+  let timeline = GSAP.timeline()
 
   return (
     <>
       <group position={[0, 0, 0]}>
         {/* <Postcard /> */}
         {/* <Intro /> */}
-        {/* <Sky /> */}
+        <Sky />
 
-        {scene2D.display && (
-          <mesh position={[1, 1, 0.5]} onClick={() => setScene2D({ name: 'kitchen', display: true })}>
-            <planeGeometry args={[1, 0.5, 64, 64]} />
-            <meshBasicMaterial attach='material' opacity={1} transparent color={0xffff00} />
-          </mesh>
+        {scene2D === 'kitchen' && (
+          <Kitchen timeline={timeline} explore={scene2D} setScene2D={setScene2D} zoom={zoom} setZoom={setZoom} />
         )}
 
-        {scene2D.display && scene2D.name === 'kitchen' && <Kitchen />}
-
-        <Castle scale={0.24} position={[0, -2, -3]} rotation={[0.0, 1.5, 0]} />
-        {/* <Castle
+        <Castle
           scale={0.24}
           position={[0, -2, -3]}
           rotation={[0.0, 1.5, 0]}
-          setRotation={setRotation}
           scene2D={scene2D}
           setScene2D={setScene2D}
-        /> */}
+          explore={explore}
+          setExplore={setExplore}
+          timeline={timeline}
+          zoom={zoom}
+          setZoom={setZoom}
+        />
+
         <Cloud image='1' position={[-2.6, -1.9, 0]} size={{ width: 4, height: 2 }} />
         <Cloud image='2' position={[0.1, -2.2, 0]} size={{ width: 3.3, height: 1.8 }} />
         <Cloud image='0' position={[2, -1.6, 1]} size={{ width: 2.8, height: 1.6 }} />
@@ -139,6 +101,8 @@ export const Scene = () => {
         {/* far*/}
         <Cloud image='2' position={[9, 0.4, -13]} size={{ width: 8.83, height: 8 }} />
         <Cloud image='1' position={[-7, 0.8, -9]} size={{ width: 5.83, height: 5 }} />
+
+        <Stats />
       </group>
     </>
   )

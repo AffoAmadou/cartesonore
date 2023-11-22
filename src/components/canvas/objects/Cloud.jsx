@@ -1,12 +1,10 @@
-
-
-import { useGLTF, shaderMaterial } from '@react-three/drei'
+import { useGLTF, shaderMaterial, useTexture } from '@react-three/drei'
 import { useFrame, useLoader, extend } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useRef, useEffect } from 'react'
-import nuage from "../../../../public/img/nuages.png"
-import nuage1 from "../../../../public/img/nuage1.png"
-import nuage2 from "../../../../public/img/nuage2.png"
+import nuage from '../../../../public/img/nuages.png'
+import nuage1 from '../../../../public/img/nuage1.png'
+import nuage2 from '../../../../public/img/nuage2.png'
 import GSAP from 'gsap'
 
 //!Clouds
@@ -18,16 +16,16 @@ export const Cloud = ({ image, position, size }) => {
   let textures = [texture, texturetwo, texturethree]
 
   textures = textures.map((texture) => {
-    texture.encoding = THREE.LinearSRGBColorSpace;
-    return texture;
-  });
+    texture.colorSpace = THREE.SRGBColorSpace
+    return texture
+  })
 
   let meshref = useRef(null)
   useEffect(() => {
     let tl = GSAP.timeline({
       ease: 'ease.in',
       repeat: -1,
-    });
+    })
 
     // Scale up
     tl.to(meshref.current.scale, {
@@ -35,7 +33,7 @@ export const Cloud = ({ image, position, size }) => {
       x: 1.3,
       y: 1.3,
       z: 1.3,
-    });
+    })
 
     // Scale down
     tl.to(meshref.current.scale, {
@@ -43,20 +41,23 @@ export const Cloud = ({ image, position, size }) => {
       x: 1,
       y: 1,
       z: 1,
-    },);
-
+    })
   }, [])
-
 
   return (
     <mesh ref={meshref} position={position}>
       <planeGeometry args={[size.width, size.height, 64, 64]} />
       {/* <cloudShaderMaterial side={THREE.DoubleSide} transparent uTextureOne={textures[image]} /> */}
-      <meshBasicMaterial side={THREE.DoubleSide} transparent map={textures[image]} />
+      <meshBasicMaterial
+        side={THREE.DoubleSide}
+        transparent
+        map={textures[image]}
+        depthWrite={false}
+        toneMapped={false}
+      />
     </mesh>
   )
 }
-
 
 export const CloudShaderMaterial = shaderMaterial(
   {
@@ -64,11 +65,11 @@ export const CloudShaderMaterial = shaderMaterial(
     uColor: new THREE.Color(0.0, 0.0, 0.0),
     uTextureOne: new THREE.Texture(),
     fogColor: new THREE.Color(0xff0000),
-    fogNear: { type: "f", value: 1 },
-    fogFar: { type: "f", value: 10 }
+    fogNear: { type: 'f', value: 1 },
+    fogFar: { type: 'f', value: 10 },
   },
   // vertex shader
-  /*glsl*/`
+  /*glsl*/ `
   varying vec2 vUv;
     varying float vWave;
     varying float fogDepth;
@@ -83,7 +84,7 @@ export const CloudShaderMaterial = shaderMaterial(
     }
   `,
   // fragment shader
-  /*glsl*/`
+  /*glsl*/ `
   uniform vec3 uColor;
     uniform float uTime;
     uniform sampler2D uTextureOne;
@@ -107,8 +108,7 @@ export const CloudShaderMaterial = shaderMaterial(
       gl_FragColor = vec4(foggedColor, baseColor.a);
 }
   `,
-
 )
 CloudShaderMaterial.transparent = true
 CloudShaderMaterial.depthWrite = false
-extend({ CloudShaderMaterial });
+extend({ CloudShaderMaterial })

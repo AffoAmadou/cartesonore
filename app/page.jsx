@@ -52,8 +52,7 @@ export default function Page() {
         <View orbit={false} className='relative h-full  sm:w-full'>
           {/* <fog attach='fog' color="white" near={7} far={10} /> */}
           <Suspense fallback={null}>
-            <fog attach='fog' color='#D4CBB3' near={6} far={16} />
-
+            <fog attach='fog' color='#FFCA9B' near={9} far={16} />
             {/*<Castle scale={.24} position={[0, -2, -3]} rotation={[0.0, 1.5, 0]} />  */}
             {/* <Postcard /> */}
             {/* <Raven /> */}
