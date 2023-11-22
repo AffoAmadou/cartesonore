@@ -15,7 +15,7 @@ export const Lily = ({ position }) => {
   let texture = useLoader(THREE.TextureLoader, lily.src)
   const [isHover, setIsHover] = useState(null)
   const soundref = useRef(null)
-  let animatable = { distance: soundref.current.distance };
+
   let meshref = useRef(null)
   useEffect(() => {
 
@@ -30,9 +30,9 @@ export const Lily = ({ position }) => {
     let tl = GSAP.timeline({})
     tl.to(e.object.scale, {
       duration: .5,
-      x: 1.2,
-      y: 1.2,
-      z: 1.2,
+      x: 1.1,
+      y: 1.1,
+      z: 1.1,
     });
   }
 
@@ -51,14 +51,14 @@ export const Lily = ({ position }) => {
   const playSound = () => {
     if (soundref.current) {
       soundref.current.play();
-
+      const animatable = { distance: soundref.current.distance };
 
       GSAP.fromTo(
         animatable,
         { distance: soundref.current.distance },
         {
           distance: 0.1,
-          duration: 3,
+          duration: 6,
           onUpdate: () => {
             soundref.current.distance = animatable.distance;
             console.log('update', soundref.current.distance);

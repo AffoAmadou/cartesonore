@@ -58,24 +58,22 @@ export default function Page() {
   //ffCBB3
   //5caeb1
   const colors = ['#b3c3ff', '#ffCBB3', '#5caeb1'];
+  const [colorIndex, setColorIndex] = useState(0);
   const handleIntroClick = () => {
     setIsIntroClicked(true)
     setIsStarted(true)
   }
 
   useEffect(() => {
-    // Function to change the color
-    // const changeColor = (color) => {
-    //   setFogColor(color);
-    // };
 
-    // // Create a GSAP timeline
-    // let tl = GSAP.timeline({ repeat: -1 });
 
-    // // Schedule color changes
-    // colors.forEach(color => {
-    //   tl.to({}, { duration: 30, onStart: () => changeColor(color) });
+    //With GSAP every 30 seconds, add 1 to the colorIndex state if its=2 then set it to 0
 
+    const interval = setInterval(() => {
+      setColorIndex((colorIndex + 1) % colors.length);
+      console.log(colorIndex)
+    }
+      , 30000);
 
   });
 
@@ -87,7 +85,7 @@ export default function Page() {
         <View orbit={false} className='relative h-full  sm:w-full'>
           {/* <fog attach='fog' color="white" near={7} far={10} /> */}
           <Suspense fallback={null}>
-            <fog attach='fog' color={fogColor} near={6} far={16} />
+            <fog attach='fog' color={colors[colorIndex]} near={6} far={16} />
             <Scene setIsStarted={setIsStarted} isStarted={isStarted} isPlaying={isPlaying} />
             <Common color={'#000000'} />
           </Suspense>
