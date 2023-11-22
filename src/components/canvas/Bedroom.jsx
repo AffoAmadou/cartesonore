@@ -18,6 +18,9 @@ export const Bedroom = (props) => {
   const textureKitchen = useTexture('../../../img/bedroom/bedroom.png')
   const textureDepthMapKitchen = useTexture('../../../img/bedroom/bedroom_depthmap.png')
 
+  const soundref = useRef(null)
+
+
   let textures = [textureKitchen, textureDepthMapKitchen]
 
   textures = textures.map((texture) => {
@@ -38,6 +41,11 @@ export const Bedroom = (props) => {
     let ang_rad = (state.camera.fov * Math.PI) / 180
     let fov_y = state.camera.position.z * Math.tan(ang_rad / 2) * 1
 
+    if (soundref.current) {
+
+      soundref.current.play();
+      console.log(soundref.current.buffer.duration)
+    }
     let scaleMeshScene = GSAP.fromTo(
       meshSceneRef.current.scale,
       {
@@ -94,7 +102,9 @@ export const Bedroom = (props) => {
           attach='material'
           uImage={textureKitchen}
           uDepthMap={textureDepthMapKitchen}
+
         />
+        <PositionalAudio url={sound} distance={10} ref={soundref} />
       </mesh>
     </group>
   )
