@@ -21,7 +21,6 @@ import { Chien } from './objects/Chien'
 import { EffectComposer, Outline } from '@react-three/postprocessing'
 import { KernelSize } from 'postprocessing'
 
-
 //!Scene Output scene
 export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
   const meshref = useRef(null)
@@ -103,8 +102,8 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
               setIsPathComplete={setIsPathComplete}
               isPathComplete={isPathComplete}
             />
-            <Lily position={[0, -1.4, 0]} isLily={isLily} setOutlineObject={setOutlineObject} />
-            <Chien position={[-.4, -1.4, -2.40]} isChien={isChien} />
+            <Lily position={[0, -1.4, 0]} isLily={isLily} />
+            <Chien position={[-0.4, -1.4, -2.4]} isChien={isChien} />
           </>
         )}
 
@@ -128,18 +127,74 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
         {lastClouds && (
           <>
             {/* middle*/}
-            <Cloud setIsCastle={setIsCastle} isCastle={isCastle} second={true} image='2' position={[-5, -2, -4]} size={{ width: 5.83, height: 3 }} />
-            <Cloud setIsCastle={setIsCastle} isCastle={isCastle} second={true} image='1' position={[0, -1.4, -4]} size={{ width: 6, height: 4 }} />
-            <Cloud setIsCastle={setIsCastle} isCastle={isCastle} second={true} image='0' position={[5.4, -2, -4]} size={{ width: 5.83, height: 3.8 }} />
-            <Cloud setIsCastle={setIsCastle} isCastle={isCastle} second={true} image='1' position={[2.6, -0.65, -4.3]} size={{ width: 7, height: 4 }} />
+            <Cloud
+              setIsCastle={setIsCastle}
+              isCastle={isCastle}
+              second={true}
+              image='2'
+              position={[-5, -2, -4]}
+              size={{ width: 5.83, height: 3 }}
+            />
+            <Cloud
+              setIsCastle={setIsCastle}
+              isCastle={isCastle}
+              second={true}
+              image='1'
+              position={[0, -1.4, -4]}
+              size={{ width: 6, height: 4 }}
+            />
+            <Cloud
+              setIsCastle={setIsCastle}
+              isCastle={isCastle}
+              second={true}
+              image='0'
+              position={[5.4, -2, -4]}
+              size={{ width: 5.83, height: 3.8 }}
+            />
+            <Cloud
+              setIsCastle={setIsCastle}
+              isCastle={isCastle}
+              second={true}
+              image='1'
+              position={[2.6, -0.65, -4.3]}
+              size={{ width: 7, height: 4 }}
+            />
 
             {/* top */}
-            <Cloud setIsCastle={setIsCastle} isCastle={isCastle} second={true} image='0' position={[-5.5, -1, -6]} size={{ width: 7.3, height: 4.3 }} />
-            <Cloud setIsCastle={setIsCastle} isCastle={isCastle} second={true} image='2' position={[-0.1, -0.3, -5]} size={{ width: 8, height: 5 }} />
+            <Cloud
+              setIsCastle={setIsCastle}
+              isCastle={isCastle}
+              second={true}
+              image='0'
+              position={[-5.5, -1, -6]}
+              size={{ width: 7.3, height: 4.3 }}
+            />
+            <Cloud
+              setIsCastle={setIsCastle}
+              isCastle={isCastle}
+              second={true}
+              image='2'
+              position={[-0.1, -0.3, -5]}
+              size={{ width: 8, height: 5 }}
+            />
 
             {/* far*/}
-            <Cloud setIsCastle={setIsCastle} isCastle={isCastle} second={true} image='2' position={[9, 0.4, -13]} size={{ width: 8.83, height: 8 }} />
-            <Cloud setIsCastle={setIsCastle} isCastle={isCastle} second={true} image='1' position={[-7, 0.8, -9]} size={{ width: 5.83, height: 5 }} />
+            <Cloud
+              setIsCastle={setIsCastle}
+              isCastle={isCastle}
+              second={true}
+              image='2'
+              position={[9, 0.4, -13]}
+              size={{ width: 8.83, height: 8 }}
+            />
+            <Cloud
+              setIsCastle={setIsCastle}
+              isCastle={isCastle}
+              second={true}
+              image='1'
+              position={[-7, 0.8, -9]}
+              size={{ width: 5.83, height: 5 }}
+            />
           </>
         )}
 
