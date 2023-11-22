@@ -1,52 +1,60 @@
-
 import { useGLTF, shaderMaterial } from '@react-three/drei'
 import { useFrame, useLoader, extend } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useRef, useEffect, useState } from 'react'
 import GSAP from 'gsap'
-import { EffectComposer, Outline } from '@react-three/postprocessing'
-import { KernelSize } from 'postprocessing'
-import carte from "../../../../public/img/carte.png"
-import intro from "../../../../public/img/intro.png"
+import carte from '../../../../public/img/carte.png'
+import intro from '../../../../public/img/intro.png'
 
 //!Postal card model
 
-export const Postcard = ({ isStarted, isPlaying, setFirstClouds, setIsStarted, setLastClouds, setIsCastle, setIsPostcard }) => {
+export const Postcard = ({
+  isStarted,
+  isPlaying,
+  setFirstClouds,
+  setIsStarted,
+  setLastClouds,
+  setIsCastle,
+  setIsPostcard,
+  setOutlineObject,
+}) => {
   const meshref = useRef(null)
   const materialref = useRef(null)
   const [animate, setAnimate] = useState(false)
-  const [isHover, setIsHover] = useState(null)
   const [isFirstTime, setIsFirstTime] = useState(true)
   let texture = useLoader(THREE.TextureLoader, carte.src)
-  texture.colorSpace = THREE.LinearSRGBColorSpace;
+  texture.colorSpace = THREE.LinearSRGBColorSpace
 
   let texturetwo = useLoader(THREE.TextureLoader, intro.src)
-  texturetwo.colorSpace = THREE.LinearSRGBColorSpace;
+  texturetwo.colorSpace = THREE.LinearSRGBColorSpace
 
   useFrame(({ clock }) => {
-    meshref.current.uTime = clock.getElapsedTime();
-  });
+    meshref.current.uTime = clock.getElapsedTime()
+  })
 
   useEffect(() => {
-
     //?Timeline animation
     let tl = GSAP.timeline({
       ease: 'sine.inOut',
-    });
+    })
 
     if (isFirstTime) {
       meshref.current.scale.set(0.29, 0.29, 0.29)
-      meshref.current.rotation.set(0, 0, .45)
-      meshref.current.position.set(-.1, 0, 0)
+      meshref.current.rotation.set(0, 0, 0.45)
+      meshref.current.position.set(-0.1, 0, 0)
 
       console.log('first time')
-      GSAP.fromTo(materialref.current, {
-        opacity: 0,
-      }, {
-        opacity: 1,
-        duration: 8,
-        ease: 'expo.inOut',
-      })
+      GSAP.fromTo(
+        materialref.current,
+        {
+          opacity: 0,
+        },
+        {
+          opacity: 1,
+          duration: 8,
+          ease: 'expo.inOut',
+        },
+      )
 
       setIsFirstTime(false)
     }
@@ -54,51 +62,56 @@ export const Postcard = ({ isStarted, isPlaying, setFirstClouds, setIsStarted, s
     if (isStarted) {
       animateCard()
     }
-
   }, [isStarted])
-
 
   const animateCard = () => {
     let tl = GSAP.timeline({
       ease: 'sine.inOut',
-    });
+    })
 
     tl.to(meshref.current.position, {
       delay: 2,
       duration: 2.5,
       z: -3,
-    });
+    })
 
-    tl.to(meshref.current.rotation, {
-      duration: 1.5,
-      x: -Math.PI * 0.5,
+    tl.to(
+      meshref.current.rotation,
+      {
+        duration: 1.5,
+        x: -Math.PI * 0.5,
 
-      onUpdate: () => {
-        if (tl.progress() > 0.5) {
-          setFirstClouds(true)
-        }
-      }
-    }, "-=1");
-
-    tl.to(meshref.current.position, {
-      duration: 2.5,
-      y: -2.3,
-      ease: "power1.out",
-
-      onUpdate: () => {
-        if (tl.progress() > 0.9) {
-          setLastClouds(true)
-        }
-
-        if (tl.progress() > 0.95) {
-          setIsCastle(true)
-        }
+        onUpdate: () => {
+          if (tl.progress() > 0.5) {
+            setFirstClouds(true)
+          }
+        },
       },
-      onComplete: () => {
-        setIsPostcard(false)
-      }
-    }, "-=2");
+      '-=1',
+    )
 
+    tl.to(
+      meshref.current.position,
+      {
+        duration: 2.5,
+        y: -2.3,
+        ease: 'power1.out',
+
+        onUpdate: () => {
+          if (tl.progress() > 0.9) {
+            setLastClouds(true)
+          }
+
+          if (tl.progress() > 0.95) {
+            setIsCastle(true)
+          }
+        },
+        onComplete: () => {
+          setIsPostcard(false)
+        },
+      },
+      '-=2',
+    )
   }
 
   //!CLICK EFFECT
@@ -108,7 +121,7 @@ export const Postcard = ({ isStarted, isPlaying, setFirstClouds, setIsStarted, s
     let tl = GSAP.timeline({
       ease: 'expo.in',
       duration: 1,
-    });
+    })
 
     tl.to(meshref.current.position, {
       duration: 1,
@@ -117,10 +130,14 @@ export const Postcard = ({ isStarted, isPlaying, setFirstClouds, setIsStarted, s
       z: 0,
     })
 
-    tl.to(meshref.current.rotation, {
-      duration: 1,
-      z: 0,
-    }, "-=1");
+    tl.to(
+      meshref.current.rotation,
+      {
+        duration: 1,
+        z: 0,
+      },
+      '-=1',
+    )
 
     tl.to(meshref.current.scale, {
       duration: 1.5,
@@ -130,44 +147,44 @@ export const Postcard = ({ isStarted, isPlaying, setFirstClouds, setIsStarted, s
 
       onComplete: () => {
         setIsStarted(true)
-      }
-    });
+      },
+    })
   }
 
   //!HOVER EFFECT
   const handleHover = (e) => {
-    console.log(e)
-    setIsHover(e.object)
+    setOutlineObject(e.object)
   }
 
   const handleNonHover = () => {
-    setIsHover(null)
+    setOutlineObject(null)
   }
 
   return (
     <>
-      <EffectComposer multisampling={8} autoClear={false}>
-        <Outline
-          selection={isHover}
-          edgeStrength={10.0}
-          visibleEdgeColor={0xffff00}
-          hiddenEdgeColor={0x101010}
-          blur={true}
-          kernelSize={KernelSize.SMALL}
-        />
-
-      </EffectComposer>
-      <mesh onPointerOut={handleNonHover} onPointerOver={(e) => handleHover(e)} onClick={handleClick} ref={meshref} position={[0, 0, 0]}>
+      <mesh
+        ref={meshref}
+        position={[0, 0, 0]}
+        onClick={handleClick}
+        onPointerOut={handleNonHover}
+        onPointerOver={(e) => handleHover(e)}
+      >
         <planeGeometry args={[7.86, 4.37, 64, 64]} />
 
-        <postCardShaderMaterial ref={materialref} side={THREE.DoubleSide} attach="material" opacity={1} transparent uTextureOne={texture} uTextureTwo={texturetwo} isStarted={isStarted} />
-
+        <postCardShaderMaterial
+          ref={materialref}
+          side={THREE.DoubleSide}
+          attach='material'
+          opacity={1}
+          transparent
+          uTextureOne={texture}
+          uTextureTwo={texturetwo}
+          isStarted={isStarted}
+        />
       </mesh>
     </>
   )
 }
-
-
 
 export const PostCardShaderMaterial = shaderMaterial(
   {
@@ -175,7 +192,7 @@ export const PostCardShaderMaterial = shaderMaterial(
     uTextureOne: new THREE.Texture(),
   },
   // vertex shader
-  /*glsl*/`
+  /*glsl*/ `
     varying vec2 vUv;
     uniform float uTime;
 
@@ -186,7 +203,7 @@ export const PostCardShaderMaterial = shaderMaterial(
     }
   `,
   // fragment shader
-  /*glsl*/`
+  /*glsl*/ `
     uniform sampler2D uTextureOne;
     varying vec2 vUv;
 
@@ -197,8 +214,7 @@ export const PostCardShaderMaterial = shaderMaterial(
   gl_FragColor = imageOne;
     }
   `,
-
 )
 PostCardShaderMaterial.transparent = true
 PostCardShaderMaterial.depthWrite = false
-extend({ PostCardShaderMaterial });
+extend({ PostCardShaderMaterial })

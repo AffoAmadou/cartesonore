@@ -10,7 +10,8 @@ import GSAP from 'gsap'
 export const Kitchen = (props) => {
   const depthMaterial = useRef()
   const geometryRef = useRef()
-  const meshRef = useRef()
+  const meshSceneRef = useRef()
+  const meshNavigationRef = useRef()
   const textureKitchen = useTexture('../../../img/kitchen/kitchen.png')
   const textureDepthMapKitchen = useTexture('../../../img/kitchen/kitchen_depthmap.png')
 
@@ -35,8 +36,8 @@ export const Kitchen = (props) => {
     let ang_rad = (state.camera.fov * Math.PI) / 180
     let fov_y = state.camera.position.z * Math.tan(ang_rad / 2) * 1
 
-    let scaleMesh = GSAP.fromTo(
-      meshRef.current.scale,
+    let scaleMeshScene = GSAP.fromTo(
+      meshSceneRef.current.scale,
       {
         x: 0,
         y: 0,
@@ -51,13 +52,30 @@ export const Kitchen = (props) => {
       },
     )
 
-    props.timeline.add(scaleMesh, 0)
+    let scaleMeshNavigation = GSAP.fromTo(
+      meshNavigationRef.current.scale,
+      {
+        x: 0,
+        y: 0,
+        z: 0,
+      },
+      {
+        x: 1,
+        y: 1,
+        z: 1,
+        duration: 1,
+        ease: 'power2.out',
+      },
+    )
+
+    props.timeline.add(scaleMeshScene, 0).add(scaleMeshNavigation, 1)
   }, [])
 
   return (
     <group>
       <mesh
-        position={[state.camera.position.x / 1.52, state.camera.position.y / 1.32, -0.5]}
+        ref={meshNavigationRef}
+        position={[state.camera.position.x / 1.53, state.camera.position.y / 1.32, -0.5]}
         onPointerDown={() => {
           props.setScene2D(null)
           props.setZoom(false)
@@ -68,7 +86,7 @@ export const Kitchen = (props) => {
         <meshBasicMaterial color={0x00ffff} />
       </mesh>
 
-      <mesh ref={meshRef} position={[state.camera.position.x, state.camera.position.y, -0.83]} scale={[1, 1, 1]}>
+      <mesh ref={meshSceneRef} position={[state.camera.position.x, state.camera.position.y, -0.83]} scale={[1, 1, 1]}>
         <planeGeometry ref={geometryRef} />
         <pseudo3DShaderMaterial
           ref={depthMaterial}
