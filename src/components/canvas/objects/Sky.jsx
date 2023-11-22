@@ -1,4 +1,3 @@
-
 import { useGLTF, shaderMaterial } from '@react-three/drei'
 import { useFrame, useLoader, extend } from '@react-three/fiber'
 import * as THREE from 'three'
@@ -9,15 +8,9 @@ import GSAP from 'gsap'
 export const Sky = () => {
   const meshref = useRef(null)
 
-  useFrame(({ clock }) => {
-  });
+  useFrame(({ clock }) => {})
 
-  useEffect(() => {
-
-
-  }, [])
-
-
+  useEffect(() => {}, [])
 
   return (
     <>
@@ -38,6 +31,7 @@ export const SkyShaderMaterial = shaderMaterial(
   },
   // vertex shader
   /*glsl*/`
+
   varying vec2 vUv;
     varying float vWave;
 
@@ -50,6 +44,7 @@ export const SkyShaderMaterial = shaderMaterial(
     }
   `,
   // fragment shader
+
   /*glsl*/`
   uniform vec3 uColor;
     uniform float uTime;
@@ -70,3 +65,4 @@ uniform vec3 uBColor;
 SkyShaderMaterial.transparent = true
 SkyShaderMaterial.depthWrite = false
 extend({ SkyShaderMaterial });
+

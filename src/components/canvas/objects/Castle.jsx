@@ -4,7 +4,8 @@ import { useGLTF } from '@react-three/drei'
 import { EffectComposer, Outline } from '@react-three/postprocessing'
 import { KernelSize } from 'postprocessing'
 import { useEffect, useRef, useState } from 'react'
-import { useFrame } from '@react-three/fiber'
+import { useThree } from '@react-three/fiber'
+import GSAP from 'gsap'
 
 //Castle model
 export const Castle = (props) => {
@@ -14,11 +15,12 @@ export const Castle = (props) => {
   const [outlineObject, setOutlineObject] = useState(null)
   const [selectedObject, setSelectedObject] = useState(null)
   const [zoom, setZoom] = useState(false)
-  const positionVec = new THREE.Vector3()
-  const lookatVec = new THREE.Vector3()
-  const lookAtQuat = new THREE.Quaternion()
+  const positionVec = new THREE.Vector3(0, 0, 6)
+  const lookatVec = new THREE.Vector3(0, 0, 0)
 
   const handleHover = (e) => {
+    if (props.scene2D) return
+
     if (e.object.name === 'chambre1' || e.object.name === 'cuisine1') {
       setOutlineObject(e.object)
     }
@@ -29,50 +31,44 @@ export const Castle = (props) => {
   }
 
   const zoomToView = (focusRef) => {
-    if (props.scene2D.display) return
+    if (props.scene2D) return
 
     if (focusRef.object.name === 'chambre1' || focusRef.object.name === 'cuisine1') {
-      setZoom(true)
+      props.setZoom(true)
       setSelectedObject(focusRef.object)
-      props.setRotation(false)
-      props.setScene2D({ name: '', display: true })
     } else {
-      setZoom(false)
+      props.setZoom(false)
       setSelectedObject(null)
-      props.setRotation(true)
-      props.setScene2D({ name: '', display: false })
+      props.setScene2D(null)
     }
   }
 
-  useFrame((state) => {
-    const step = 0.05
+  const state = useThree((state) => state)
 
-    if (zoom) {
+  useEffect(() => {
+    if (props.zoom) {
       if (selectedObject.name === 'chambre1') {
-        positionVec.set(-0.5, 1, 3)
-        lookatVec.set(-0.5, 0.5, -3.2)
+        positionVec.set(-0.6, -0.3, 0)
       } else {
-        positionVec.set(0.7, 1, 3)
-        lookatVec.set(0.7, 0.5, -3.2)
+        positionVec.set(0.6, -0.6, 0)
       }
     } else {
       positionVec.set(0, 0, 6)
-      lookatVec.set(0, 0, 0)
     }
 
-    state.camera.position.lerp(positionVec, step)
-    ghostMesh.current.position.lerp(lookatVec, step)
+    let cameraPosition = GSAP.to(state.camera.position, {
+      x: positionVec.x,
+      y: positionVec.y,
+      z: positionVec.z,
+      duration: 1,
+      ease: 'power2.out',
+      onComplete: () => {
+        if (props.zoom) props.setScene2D('kitchen')
+      },
+    })
 
-    lookAtQuat.set(lookatVec.x, lookatVec.y, lookatVec.z, 1)
-
-    state.camera.lookAt(ghostMesh.current.position.x, ghostMesh.current.position.y, ghostMesh.current.position.z)
-  })
-
-  useEffect(() => {
-    if (selectedObject) {
-      scene.rotation.set([0, 0, 0])
-    }
-  }, [])
+    props.timeline.add(cameraPosition, 0)
+  }, [props.zoom])
 
   return (
     <>
@@ -92,12 +88,12 @@ export const Castle = (props) => {
         {...props}
         onPointerOver={(e) => handleHover(e)}
         onPointerOut={handleNonHover}
-        // onClick={(e) => {
-        //   zoomToView(e)
-        // }}
-        onPointerMissed={() => setZoom(false)}
+
+        onClick={(e) => {
+          zoomToView(e)
+        }}
+
       />
-      <mesh ref={ghostMesh} />
     </>
   )
 }

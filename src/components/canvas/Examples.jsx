@@ -1,7 +1,7 @@
 'use client'
 
-import { useGLTF, shaderMaterial } from '@react-three/drei'
-import { useFrame, useLoader, extend } from '@react-three/fiber'
+import { useGLTF, shaderMaterial, Stats } from '@react-three/drei'
+import { useFrame, useLoader, extend, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useRef, useEffect, useState } from 'react'
 import { PositionalAudio } from '@react-three/drei'
@@ -50,56 +50,89 @@ export const Raven = () => {
 export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
   const meshref = useRef(null)
 
-  const [rotation, setRotation] = useState(true)
-  const [scene2D, setScene2D] = useState({ display: false, name: '' })
+  const [explore, setExplore] = useState(false)
+  const [scene2D, setScene2D] = useState(false)
+  const [zoom, setZoom] = useState(false)
 
   const [firstClouds, setFirstClouds] = useState(false)
   const [lastClouds, setLastClouds] = useState(false)
   const [isCastle, setIsCastle] = useState(false)
   const [isPostcard, setIsPostcard] = useState(true)
 
-  useFrame(({ clock }) => { })
 
-  useEffect(() => { }, [])
+
+  const set = useThree((state) => state.set)
+  const state = useThree((state) => state)
+
+  let timeline = GSAP.timeline()
+
 
   return (
     <>
       <group position={[0, 0, 0]}>
 
+
         {!isStarted && <Intro />}
 
         <Lily position={[0, -1.4, 0]} />
         <Sky />
-        {isPostcard && <Postcard isStarted={isStarted} isPlaying={isPlaying} setFirstClouds={setFirstClouds} setLastClouds={setLastClouds} setIsStarted={setIsStarted} setIsCastle={setIsCastle} setIsPostcard={setIsPostcard} />
+        {
+          isPostcard && <Postcard isStarted={isStarted} isPlaying={isPlaying} setFirstClouds={setFirstClouds} setLastClouds={setLastClouds} setIsStarted={setIsStarted} setIsCastle={setIsCastle} setIsPostcard={setIsPostcard} />
         }
-        {scene2D.display && (
-          <mesh position={[1, 1, 0.5]} onClick={() => setScene2D({ name: 'kitchen', display: true })}>
-            <planeGeometry args={[1, 0.5, 64, 64]} />
-            <meshBasicMaterial attach='material' opacity={1} transparent color={0xffff00} />
-          </mesh>
-        )}
-
-        {scene2D.display && scene2D.name === 'kitchen' && <Kitchen />}
-
-        {isCastle &&
-          <Castle scale={0.24} position={[0, -2, -3]} rotation={[0.0, 1.5, 0]} />
+        {
+          scene2D.display && (
+            <mesh position={[1, 1, 0.5]} onClick={() => setScene2D({ name: 'kitchen', display: true })}>
+              <planeGeometry args={[1, 0.5, 64, 64]} />
+              <meshBasicMaterial attach='material' opacity={1} transparent color={0xffff00} />
+            </mesh>
+          )
         }
+
+
+        {
+          isCastle &&
+
+          <Castle
+            scale={0.24}
+            position={[0, -2, -3]}
+            rotation={[0.0, 1.5, 0]}
+            scene2D={scene2D}
+            setScene2D={setScene2D}
+            explore={explore}
+            setExplore={setExplore}
+            timeline={timeline}
+            zoom={zoom}
+            setZoom={setZoom}
+          />
+
+        }
+
+
+        {
+          scene2D === 'kitchen' && (
+            <Kitchen timeline={timeline} explore={scene2D} setScene2D={setScene2D} zoom={zoom} setZoom={setZoom} />
+          )
+        }
+
 
         {/* //Apparition Nuages */}
-        {firstClouds && <>
-          <Cloud image='1' position={[-2.6, -2, 0]} size={{ width: 4, height: 2 }} />
-          <Cloud image='2' position={[0.1, -2.3, 0]} size={{ width: 3.3, height: 1.8 }} />
-          <Cloud image='0' position={[2, -1.6, 1]} size={{ width: 2.8, height: 1.6 }} />
-        </>
+        {
+          firstClouds && <>
+            <Cloud image='1' position={[-2.6, -2, 0]} size={{ width: 4, height: 2 }} />
+            <Cloud image='2' position={[0.1, -2.3, 0]} size={{ width: 3.3, height: 1.8 }} />
+            <Cloud image='0' position={[2, -1.6, 1]} size={{ width: 2.8, height: 1.6 }} />
+          </>
         }
 
-        {lastClouds &&
+        {
+          lastClouds &&
           <>
             {/* middle*/}
             < Cloud second={true} image='2' position={[-5, -2, -4]} size={{ width: 5.83, height: 3 }} />
             <Cloud second={true} image='1' position={[0, -1.4, -4]} size={{ width: 6, height: 4 }} />
             <Cloud second={true} image='0' position={[5.4, -2, -4]} size={{ width: 5.83, height: 3.8 }} />
             <Cloud second={true} image='1' position={[2.6, -0.65, -4.3]} size={{ width: 7, height: 4 }} />
+
 
             {/* top */}
             <Cloud second={true} image='0' position={[-5.5, -1, -6]} size={{ width: 7.3, height: 4.3 }} />
@@ -110,7 +143,11 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
             <Cloud second={true} image='1' position={[-7, 0.8, -9]} size={{ width: 5.83, height: 5 }} />
           </>
         }
-      </group>
+
+
+        <Stats />
+
+      </group >
     </>
   )
 }

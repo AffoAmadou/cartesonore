@@ -1,12 +1,12 @@
-
-
-import { useGLTF, shaderMaterial } from '@react-three/drei'
+import { useGLTF, shaderMaterial, useTexture } from '@react-three/drei'
 import { useFrame, useLoader, extend } from '@react-three/fiber'
 import * as THREE from 'three'
+
 import { useRef, useEffect, useState } from 'react'
 import nuage from "../../../../public/img/nuages.png"
 import nuage1 from "../../../../public/img/nuage1.png"
 import nuage2 from "../../../../public/img/nuage2.png"
+
 import GSAP from 'gsap'
 
 
@@ -100,11 +100,16 @@ export const Cloud = ({ image, position, size, second = false }) => {
     <mesh ref={meshref} position={position}>
       <planeGeometry args={[size.width, size.height, 64, 64]} />
       {/* <cloudShaderMaterial side={THREE.DoubleSide} transparent uTextureOne={textures[image]} /> */}
-      <meshBasicMaterial side={THREE.DoubleSide} transparent map={textures[image]} />
+      <meshBasicMaterial
+        side={THREE.DoubleSide}
+        transparent
+        map={textures[image]}
+        depthWrite={false}
+        toneMapped={false}
+      />
     </mesh>
   )
 }
-
 
 export const CloudShaderMaterial = shaderMaterial(
   {
@@ -112,11 +117,11 @@ export const CloudShaderMaterial = shaderMaterial(
     uColor: new THREE.Color(0.0, 0.0, 0.0),
     uTextureOne: new THREE.Texture(),
     fogColor: new THREE.Color(0xff0000),
-    fogNear: { type: "f", value: 1 },
-    fogFar: { type: "f", value: 10 }
+    fogNear: { type: 'f', value: 1 },
+    fogFar: { type: 'f', value: 10 },
   },
   // vertex shader
-  /*glsl*/`
+  /*glsl*/ `
   varying vec2 vUv;
     varying float vWave;
     varying float fogDepth;
@@ -131,7 +136,7 @@ export const CloudShaderMaterial = shaderMaterial(
     }
   `,
   // fragment shader
-  /*glsl*/`
+  /*glsl*/ `
   uniform vec3 uColor;
     uniform float uTime;
     uniform sampler2D uTextureOne;
@@ -155,9 +160,9 @@ export const CloudShaderMaterial = shaderMaterial(
       gl_FragColor = vec4(foggedColor, baseColor.a);
 }
   `,
-
 )
 CloudShaderMaterial.transparent = true
 CloudShaderMaterial.depthWrite = false
+
 CloudShaderMaterial.alphaTest = 0.5
 extend({ CloudShaderMaterial });

@@ -94,29 +94,3 @@ export default function Page() {
     </>
   )
 }
-
-
-
-// {
-//   !isIntroClicked &&
-//     <div className="intro">
-//       <div className="intro__wrapper">
-//         <h1>Chere Lily...</h1>
-//         <Play />
-
-//         <Lottie
-//           options={chereOptions}
-//           height={350}
-//           width={350}
-//         />
-//         <button onClick={handleIntroClick}>
-//           <Lottie
-//             options={defaultOptions}
-//             height={350}
-//             width={350}
-//           />
-//         </button>
-
-//       </div>
-//     </div>
-// }
