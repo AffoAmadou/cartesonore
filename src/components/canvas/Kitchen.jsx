@@ -7,6 +7,11 @@ import { useEffect, useRef } from 'react'
 import { Pseudo3DShaderMaterial } from './Pseudo3DShaderMaterial'
 import GSAP from 'gsap'
 
+
+import { PositionalAudio } from '@react-three/drei'
+
+import sound from '../../../../public/sound/cuisine.mp3'
+
 export const Kitchen = (props) => {
   const depthMaterial = useRef()
   const geometryRef = useRef()
@@ -14,6 +19,9 @@ export const Kitchen = (props) => {
   const meshNavigationRef = useRef()
   const textureKitchen = useTexture('../../../img/kitchen/kitchen.png')
   const textureDepthMapKitchen = useTexture('../../../img/kitchen/kitchen_depthmap.png')
+
+  const soundref = useRef(null)
+
 
   let textures = [textureKitchen, textureDepthMapKitchen]
 

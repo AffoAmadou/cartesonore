@@ -192,22 +192,22 @@ export const Postcard = ({
             console.log('start to move the post card')
           }, time - 30000);
 
-          setTimeout(() => {
-            if (soundref.current) {
-              soundref.current.stop();
-              console.log('stop')
+          // setTimeout(() => {
+          //   if (soundref.current) {
+          //     soundref.current.stop();
+          //     console.log('stop')
 
-              GSAP.to(meshref.current.material, {
-                duration: 1.4,
-                opacity: 0,
-                onComplete: () => {
-                  setIsPostcard(false)
-                }
+          //     GSAP.to(meshref.current.material, {
+          //       duration: 1.4,
+          //       opacity: 0,
+          //       onComplete: () => {
+          //         // setIsPostcard(false)
+          //       }
 
-              })
+          //     })
 
-            }
-          }, time + 1000);
+          //   }
+          // }, time + 1000);
         }
 
       }

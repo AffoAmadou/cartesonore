@@ -36,6 +36,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
   const [isPostcard, setIsPostcard] = useState(true)
   const [isLily, setIsLily] = useState(false)
   const [isChien, setIsChien] = useState(false)
+  const [isPathComplete, setIsPathComplete] = useState([false, false])
 
   const [outlineObject, setOutlineObject] = useState(null)
 
@@ -89,6 +90,8 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
               setIsLily={setIsLily}
               setIsChien={setIsChien}
               setOutlineObject={setOutlineObject}
+              setIsPathComplete={setIsPathComplete}
+              isPathComplete={isPathComplete}
             />
             <Lily position={[0, -1.4, 0]} isLily={isLily} setOutlineObject={setOutlineObject} />
             <Chien position={[-.4, -1.4, -2.40]} isChien={isChien} />
@@ -111,7 +114,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
             <Cloud image='0' position={[2, -1.6, 1]} size={{ width: 2.8, height: 1.6 }} />
           </>
         )}
-
+        {/* Apparition nuages de fond  */}
         {lastClouds && (
           <>
             {/* middle*/}

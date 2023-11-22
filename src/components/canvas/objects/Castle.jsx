@@ -4,6 +4,7 @@ import { useGLTF } from '@react-three/drei'
 import { useEffect, useRef, useState } from 'react'
 import { useThree } from '@react-three/fiber'
 import GSAP from 'gsap'
+import { is } from '@react-spring/shared'
 
 //Castle model
 export const Castle = (props) => {
@@ -27,10 +28,17 @@ export const Castle = (props) => {
   const zoomToView = (focusRef) => {
     if (props.scene2D) return
 
-    if (focusRef.object.name === 'chambre1' || focusRef.object.name === 'cuisine1') {
+    if (focusRef.object.name === 'chambre1') {
+      console.log('chambre1')
       props.setZoom(true)
       setSelectedObject(focusRef.object)
-    } else {
+    } else if (focusRef.object.name === 'cuisine1') {
+      console.log('cuisine1')
+      props.setZoom(true)
+      setSelectedObject(focusRef.object)
+    }
+    else {
+      console.log('nope')
       props.setZoom(false)
       setSelectedObject(null)
       props.setScene2D(null)
@@ -42,6 +50,10 @@ export const Castle = (props) => {
   useEffect(() => {
     props.setIsLily(true)
     props.setIsChien(true)
+
+    console.log('ispathComplete', props.isPathComplete)
+    console.log('setisPathComplete', props.setIsPathComplete)
+
     if (props.zoom) {
       if (selectedObject.name === 'chambre1') {
         positionVec.set(-0.6, -0.6, 0)
@@ -61,6 +73,15 @@ export const Castle = (props) => {
       onComplete: () => {
         if (props.zoom) {
           selectedObject.name === 'chambre1' ? props.setScene2D('bedroom') : props.setScene2D('kitchen')
+
+          if (selectedObject.name === 'chambre1') {
+            props.setIsPathComplete([true, props.isPathComplete[1]])
+            console.log('isPathc', isPathComplete)
+          }
+          else {
+            props.setIsPathComplete([props.isPathComplete[0], true])
+            console.log('isPathc', isPathComplete)
+          }
         }
       },
     })

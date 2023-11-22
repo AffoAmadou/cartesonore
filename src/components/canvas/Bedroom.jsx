@@ -7,6 +7,9 @@ import { useEffect, useRef } from 'react'
 import { Pseudo3DShaderMaterial } from './Pseudo3DShaderMaterial'
 import GSAP from 'gsap'
 
+import { PositionalAudio } from '@react-three/drei'
+import sound from '../../../../public/sound/kitchen.mp3'
+
 export const Bedroom = (props) => {
   const depthMaterial = useRef()
   const geometryRef = useRef()
