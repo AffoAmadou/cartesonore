@@ -1,101 +1,117 @@
 'use client'
 
-import { useGLTF } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
+import { useGLTF, shaderMaterial, Stats } from '@react-three/drei'
+import { useFrame, useLoader, extend, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
-import { useMemo, useRef, useState, useEffect } from 'react'
-import { Line, useCursor, MeshDistortMaterial } from '@react-three/drei'
-import { useRouter } from 'next/navigation'
+import { useRef, useEffect, useState } from 'react'
+import { PositionalAudio } from '@react-three/drei'
+import GSAP from 'gsap'
 
-export const Blob = ({ route = '/', ...props }) => {
-  const router = useRouter()
-  const [hovered, hover] = useState(false)
-  useCursor(hovered)
-  return (
-    <mesh
-      onClick={() => router.push(route)}
-      onPointerOver={() => hover(true)}
-      onPointerOut={() => hover(false)}
-      {...props}>
-      <sphereGeometry args={[1, 64, 64]} />
-      <MeshDistortMaterial roughness={0} color={hovered ? 'hotpink' : '#1fb2f5'} />
-    </mesh>
-  )
-}
+import sound from '../../../public/sound/crow.mp3'
 
-export const Logo = ({ route = '/blob', ...props }) => {
-  const mesh = useRef(null)
-  const router = useRouter()
-
-  const [hovered, hover] = useState(false)
-  const points = useMemo(() => new THREE.EllipseCurve(0, 0, 3, 1.15, 0, 2 * Math.PI, false, 0).getPoints(100), [])
-
-  useCursor(hovered)
-  useFrame((state, delta) => {
-    const t = state.clock.getElapsedTime()
-    mesh.current.rotation.y = Math.sin(t) * (Math.PI / 8)
-    mesh.current.rotation.x = Math.cos(t) * (Math.PI / 8)
-    mesh.current.rotation.z -= delta / 4
-  })
-
-  return (
-    <group ref={mesh} {...props}>
-      {/* @ts-ignore */}
-      <Line worldUnits points={points} color='#1fb2f5' lineWidth={0.15} />
-      {/* @ts-ignore */}
-      <Line worldUnits points={points} color='#1fb2f5' lineWidth={0.15} rotation={[0, 0, 1]} />
-      {/* @ts-ignore */}
-      <Line worldUnits points={points} color='#1fb2f5' lineWidth={0.15} rotation={[0, 0, -1]} />
-      <mesh onClick={() => router.push(route)} onPointerOver={() => hover(true)} onPointerOut={() => hover(false)}>
-        <sphereGeometry args={[0.55, 64, 64]} />
-        <meshPhysicalMaterial roughness={0} color={hovered ? 'hotpink' : '#1fb2f5'} />
-      </mesh>
-    </group>
-  )
-}
-
-export function Duck(props) {
-  const { scene } = useGLTF('/duck.glb')
-
-  useFrame((state, delta) => (scene.rotation.y += delta))
-
-  return <primitive object={scene} {...props} />
-}
-export function Dog(props) {
-  const { scene } = useGLTF('/dog.glb')
-
-  return <primitive object={scene} {...props} />
-}
+import { Postcard } from './objects/Postcard'
+import { Sky } from './objects/Sky'
+import { Castle } from './objects/Castle'
+import { Intro } from './objects/Intro'
+import { Cloud } from './objects/Cloud'
+import { Kitchen } from './Kitchen'
+import { Lily } from './objects/Lily'
 
 
-//Castle model
-export function Castle(props) {
-  const { scene } = useGLTF('/castle.glb')
-
-  return <primitive object={scene} {...props} />
-}
 
 
-//!Postal card model
-
-export const Postcard = () => {
+//!Scene Output scene
+export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
   const meshref = useRef(null)
 
+  const [explore, setExplore] = useState(false)
+  const [scene2D, setScene2D] = useState(false)
+  const [zoom, setZoom] = useState(false)
 
+  const [firstClouds, setFirstClouds] = useState(false)
+  const [lastClouds, setLastClouds] = useState(false)
+  const [isCastle, setIsCastle] = useState(false)
+  const [isPostcard, setIsPostcard] = useState(true)
+  const [isLily, setIsLily] = useState(false)
 
-  useFrame(({ clock }) => {
-    meshref.current.uTime = clock.getElapsedTime();
-  });
+  const set = useThree((state) => state.set)
+  const state = useThree((state) => state)
 
-  useEffect(() => {
-  }, [])
+  let timeline = GSAP.timeline()
 
   return (
     <>
-      <mesh ref={meshref} position={[0, .13, -3]}>
-        <planeGeometry args={[3, 2.6, 64, 64]} />
-        <meshBasicMaterial attach="material" opacity={1} transparent />
-      </mesh>
+      <group position={[0, 0, 0]}>
+        {!isStarted && <Intro />}
+
+        <Sky />
+
+        {isPostcard && (
+          <Postcard
+            isStarted={isStarted}
+            isPlaying={isPlaying}
+            setFirstClouds={setFirstClouds}
+            setLastClouds={setLastClouds}
+            setIsStarted={setIsStarted}
+            setIsCastle={setIsCastle}
+            setIsPostcard={setIsPostcard}
+          />
+        )}
+
+        {isCastle && (
+          <>
+            <Castle
+              scale={0.24}
+              position={[0, -2, -3]}
+              rotation={[0.0, 1.5, 0]}
+              scene2D={scene2D}
+              setScene2D={setScene2D}
+              explore={explore}
+              setExplore={setExplore}
+              timeline={timeline}
+              zoom={zoom}
+              setZoom={setZoom}
+              setIsLily={setIsLily}
+            />
+
+            <Lily position={[0, -1.4, 0]} isLily={isLily} />
+          </>
+        )}
+
+
+        {scene2D === 'kitchen' && (
+          <Kitchen timeline={timeline} explore={scene2D} setScene2D={setScene2D} zoom={zoom} setZoom={setZoom} />
+        )}
+
+        {/* //Apparition Nuages */}
+        {firstClouds && (
+          <>
+            <Cloud image='1' position={[-2.6, -2, 0]} size={{ width: 4, height: 2 }} />
+            <Cloud image='2' position={[0.1, -2.3, 0]} size={{ width: 3.3, height: 1.8 }} />
+            <Cloud image='0' position={[2, -1.6, 1]} size={{ width: 2.8, height: 1.6 }} />
+          </>
+        )}
+
+        {lastClouds && (
+          <>
+            {/* middle*/}
+            <Cloud second={true} image='2' position={[-5, -2, -4]} size={{ width: 5.83, height: 3 }} />
+            <Cloud second={true} image='1' position={[0, -1.4, -4]} size={{ width: 6, height: 4 }} />
+            <Cloud second={true} image='0' position={[5.4, -2, -4]} size={{ width: 5.83, height: 3.8 }} />
+            <Cloud second={true} image='1' position={[2.6, -0.65, -4.3]} size={{ width: 7, height: 4 }} />
+
+            {/* top */}
+            <Cloud second={true} image='0' position={[-5.5, -1, -6]} size={{ width: 7.3, height: 4.3 }} />
+            <Cloud second={true} image='2' position={[-0.1, -0.3, -5]} size={{ width: 8, height: 5 }} />
+
+            {/* far*/}
+            <Cloud second={true} image='2' position={[9, 0.4, -13]} size={{ width: 8.83, height: 8 }} />
+            <Cloud second={true} image='1' position={[-7, 0.8, -9]} size={{ width: 5.83, height: 5 }} />
+          </>
+        )}
+
+        <Stats />
+      </group>
     </>
   )
 }
