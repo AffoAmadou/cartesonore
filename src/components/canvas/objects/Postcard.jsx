@@ -91,7 +91,7 @@ export const Postcard = ({ isStarted, isPlaying, setFirstClouds, setIsStarted, s
         }
 
         if (tl.progress() > 0.95) {
-          setIsCastle(true)
+          // setIsCastle(true)
         }
       },
       onComplete: () => {

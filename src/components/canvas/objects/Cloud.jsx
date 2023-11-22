@@ -11,7 +11,7 @@ import GSAP from 'gsap'
 
 
 //!Clouds
-export const Cloud = ({ image, position, size, second = false }) => {
+export const Cloud = ({ image, position, size, second = false, setIsCastle = null, isCastle = null }) => {
   const [isCreated, setIsCreated] = useState(false)
   let texture = useLoader(THREE.TextureLoader, nuage.src)
   let texturetwo = useLoader(THREE.TextureLoader, nuage1.src)
@@ -34,23 +34,28 @@ export const Cloud = ({ image, position, size, second = false }) => {
         });
 
         meshref.current.position.z = -.5;
-        tl.fromTo(meshref.current.scale, {
-          x: 0.2,
-          y: 0.2,
-          z: 0.2,
-        }, {
-          duration: 2.5,
-          x: 1,
-          y: 1,
-          z: 1,
-          onComplete: () => {
-            setIsCreated(true)
-          }
-        });
+
+        tl.fromTo(meshref.current.material, {
+          opacity: 0,
+        },
+          {
+            duration: 2,
+            opacity: 1,
+
+            ease: "expo.out",
+            onComplete: () => {
+              if (!isCastle) {
+                setIsCastle(true)
+              }
+            }
+          });
 
         tl.to(meshref.current.position, {
           duration: 3,
           z: meshcurrentZ,
+          onComplete: () => {
+            setIsCreated(true)
+          }
         })
       }
       else {
