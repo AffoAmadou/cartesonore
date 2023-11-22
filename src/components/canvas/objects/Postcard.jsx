@@ -90,7 +90,7 @@ export const Postcard = ({ isStarted, isPlaying, setFirstClouds, setIsStarted, s
           setLastClouds(true)
         }
 
-        if (tl.progress() > 0.97) {
+        if (tl.progress() > 0.95) {
           setIsCastle(true)
         }
       },

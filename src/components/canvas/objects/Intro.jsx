@@ -34,10 +34,12 @@ export const Intro = () => {
     });
 
     tl.to(meshref.current, {
-      duration: 4.5,
+      duration: 6.5,
       progress: 1,
       onComplete: () => {
-        meshref.current.texture1 = textures[1];
+        // console.log(textures[1])
+        // if (textures[1])
+        //   meshref.current.uTextureOne = textures[1];
       }
     });
 

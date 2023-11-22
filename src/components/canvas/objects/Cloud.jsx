@@ -30,17 +30,16 @@ export const Cloud = ({ image, position, size, second = false }) => {
       if (second) {
         let meshcurrentZ = meshref.current.position.z
         let tl = GSAP.timeline({
-          ease: "expo.inOut"
+          ease: "expo.out"
         });
 
-        meshref.current.position.z = -1;
+        meshref.current.position.z = -.5;
         tl.fromTo(meshref.current.scale, {
-          duration: 1,
           x: 0.2,
           y: 0.2,
           z: 0.2,
         }, {
-          duration: 1,
+          duration: 2.5,
           x: 1,
           y: 1,
           z: 1,

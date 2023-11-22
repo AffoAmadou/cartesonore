@@ -10,16 +10,30 @@ import { EffectComposer, Outline } from '@react-three/postprocessing'
 import { KernelSize } from 'postprocessing'
 
 //!Clouds
-export const Lily = ({ position }) => {
+export const Lily = ({ position, isLily }) => {
   const [isCreated, setIsCreated] = useState(false)
   let texture = useLoader(THREE.TextureLoader, lily.src)
   const [isHover, setIsHover] = useState(null)
   const soundref = useRef(null)
-
-  let meshref = useRef(null)
+  const materialref = useRef(null)
+  const meshref = useRef(null)
+  const [opacity, setOpacity] = useState(0);
   useEffect(() => {
+    if (isLily) {
+      GSAP.to(meshref.current.material, {
+        delay: 1,
+        duration: 2,
+        opacity: 1,
+        ease: 'linear',
+        onUpdate: () => {
+          if (meshref.current) {
+            setOpacity(meshref.current.material.opacity);
+          }
+        }
+      });
+    }
 
-  })
+  }, [isLily])
 
 
   //!HOVER EFFECT
@@ -87,7 +101,7 @@ export const Lily = ({ position }) => {
       </EffectComposer>
       <mesh ref={meshref} position={position} onPointerOut={handleNonHover} onPointerOver={(e) => handleHover(e)} onClick={playSound}>
         <planeGeometry args={[.5, .8, 64, 64]} />
-        <meshBasicMaterial side={THREE.DoubleSide} transparent map={texture} />
+        <meshBasicMaterial opacity={0} ref={materialref} side={THREE.DoubleSide} transparent map={texture} />
         <PositionalAudio
           url={sound}
           distance={10}

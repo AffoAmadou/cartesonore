@@ -16,34 +16,8 @@ import { Intro } from './objects/Intro'
 import { Cloud } from './objects/Cloud'
 import { Kitchen } from './Kitchen'
 import { Lily } from './objects/Lily'
-//Castle model
 
-//Raven model
-// export function RavenModel(props) {
-//   const { scene } = useGLTF('/raven.glb')
 
-//   return <primitive object={scene} {...props} />
-// }
-
-// //!Raven
-export const Raven = () => {
-  const soundref = useRef(null)
-
-  const playSound = () => {
-    if (soundref.current) {
-      soundref.current.play();
-    }
-  };
-  return (
-    <RavenModel onClick={playSound} position={[-6, 2, -10]}>
-      <PositionalAudio
-        url={sound}
-        distance={1}
-        ref={soundref}
-      />
-    </RavenModel>
-  )
-}
 
 
 //!Scene Output scene
@@ -58,6 +32,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
   const [lastClouds, setLastClouds] = useState(false)
   const [isCastle, setIsCastle] = useState(false)
   const [isPostcard, setIsPostcard] = useState(true)
+  const [isLily, setIsLily] = useState(false)
 
 
 
@@ -74,7 +49,6 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
 
         {!isStarted && <Intro />}
 
-        <Lily position={[0, -1.4, 0]} />
         <Sky />
         {
           isPostcard && <Postcard isStarted={isStarted} isPlaying={isPlaying} setFirstClouds={setFirstClouds} setLastClouds={setLastClouds} setIsStarted={setIsStarted} setIsCastle={setIsCastle} setIsPostcard={setIsPostcard} />
@@ -91,19 +65,24 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
 
         {
           isCastle &&
+          <>
+            <Castle
+              scale={0.24}
+              position={[0, -2, -3]}
+              rotation={[0.0, 1.5, 0]}
+              scene2D={scene2D}
+              setScene2D={setScene2D}
+              explore={explore}
+              setExplore={setExplore}
+              timeline={timeline}
+              zoom={zoom}
+              setZoom={setZoom}
+              setIsLily={setIsLily}
+            />
 
-          <Castle
-            scale={0.24}
-            position={[0, -2, -3]}
-            rotation={[0.0, 1.5, 0]}
-            scene2D={scene2D}
-            setScene2D={setScene2D}
-            explore={explore}
-            setExplore={setExplore}
-            timeline={timeline}
-            zoom={zoom}
-            setZoom={setZoom}
-          />
+            <Lily position={[0, -1.4, 0]} isLily={isLily} />
+
+          </>
 
         }
 
