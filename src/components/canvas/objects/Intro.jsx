@@ -6,11 +6,14 @@ import boite from "../../../../public/img/boite.png"
 import blanc from "../../../../public/img/blanc.png"
 import disp from "../../../../public/img/disp.jpg"
 import GSAP from 'gsap'
-
+import { PositionalAudio } from '@react-three/drei'
+import sound from '../../../../public/sound/intro.mp3'
 
 
 export const Intro = () => {
   const meshref = useRef(null)
+  const soundref = useRef(null)
+
   let texture = useLoader(THREE.TextureLoader, blanc.src)
   texture.colorSpace = THREE.LinearSRGBColorSpace;
 
@@ -27,8 +30,9 @@ export const Intro = () => {
   });
 
   useEffect(() => {
-
-
+    if (soundref.current) {
+      soundref.current.play()
+    }
     let tl = GSAP.timeline({
       ease: 'sin.inOut',
     });
@@ -53,6 +57,11 @@ export const Intro = () => {
 
         <introShaderMaterial ref={meshref} side={THREE.DoubleSide} attach="material" opacity={1} transparent uTextureOne={textures[0]} uTextureTwo={textures[1]} displacement={texturethree} />
 
+        <PositionalAudio
+          url={sound}
+          distance={10}
+          ref={soundref}
+        />
       </mesh>
     </>
   )

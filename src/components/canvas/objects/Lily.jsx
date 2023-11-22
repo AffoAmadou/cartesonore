@@ -18,6 +18,8 @@ export const Lily = ({ position, isLily }) => {
   const materialref = useRef(null)
   const meshref = useRef(null)
   const [opacity, setOpacity] = useState(0);
+
+
   useEffect(() => {
     if (isLily) {
       GSAP.to(meshref.current.material, {
