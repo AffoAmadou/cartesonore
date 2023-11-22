@@ -10,7 +10,7 @@ import GSAP from 'gsap'
 
 import { PositionalAudio } from '@react-three/drei'
 
-import sound from '../../../../public/sound/cuisine.mp3'
+import sound from '../../../public/sound/cuisine.mp3'
 
 export const Kitchen = (props) => {
   const depthMaterial = useRef()
