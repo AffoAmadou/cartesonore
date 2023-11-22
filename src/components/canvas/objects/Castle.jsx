@@ -47,6 +47,7 @@ export const Castle = (props) => {
 
   useEffect(() => {
     props.setIsLily(true)
+    props.setIsChien(true)
     if (props.zoom) {
       if (selectedObject.name === 'chambre1') {
         positionVec.set(-0.6, -0.3, 0)

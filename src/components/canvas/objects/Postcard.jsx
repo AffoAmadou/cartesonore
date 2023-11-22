@@ -9,6 +9,9 @@ import { KernelSize } from 'postprocessing'
 import carte from "../../../../public/img/carte.png"
 import intro from "../../../../public/img/intro.png"
 
+import { PositionalAudio } from '@react-three/drei'
+import sound from '../../../../public/sound/cartepostale.mp3'
+
 //!Postal card model
 
 export const Postcard = ({ isStarted, isPlaying, setFirstClouds, setIsStarted, setLastClouds, setIsCastle, setIsPostcard }) => {
@@ -17,6 +20,11 @@ export const Postcard = ({ isStarted, isPlaying, setFirstClouds, setIsStarted, s
   const [animate, setAnimate] = useState(false)
   const [isHover, setIsHover] = useState(null)
   const [isFirstTime, setIsFirstTime] = useState(true)
+  const soundref = useRef(null)
+
+
+
+
   let texture = useLoader(THREE.TextureLoader, carte.src)
   texture.colorSpace = THREE.LinearSRGBColorSpace;
 
@@ -95,7 +103,7 @@ export const Postcard = ({ isStarted, isPlaying, setFirstClouds, setIsStarted, s
         }
       },
       onComplete: () => {
-        setIsPostcard(false)
+        // setIsPostcard(false)
       }
     }, "-=2");
 
@@ -104,6 +112,7 @@ export const Postcard = ({ isStarted, isPlaying, setFirstClouds, setIsStarted, s
   //!CLICK EFFECT
   const handleClick = () => {
     console.log('click')
+
 
     let tl = GSAP.timeline({
       ease: 'expo.in',
@@ -129,7 +138,40 @@ export const Postcard = ({ isStarted, isPlaying, setFirstClouds, setIsStarted, s
       z: 1,
 
       onComplete: () => {
-        setIsStarted(true)
+        // setIsStarted(true)
+        if (soundref.current) {
+          soundref.current.play();
+          console.log(soundref.current.buffer.duration)
+
+          let time = soundref.current.buffer.duration.toString().split('.')[0]
+          time *= 1000
+          console.log(time)
+
+          setTimeout(() => {
+
+            setIsStarted(true)
+
+            console.log('start to move the post card')
+          }, time - 30000);
+
+          setTimeout(() => {
+            if (soundref.current) {
+              soundref.current.stop();
+              console.log('stop')
+
+              GSAP.to(meshref.current.material, {
+                duration: 1.4,
+                opacity: 0,
+                onComplete: () => {
+                  setIsStarted(false)
+                }
+
+              })
+
+            }
+          }, time + 1000);
+        }
+
       }
     });
   }
@@ -162,6 +204,12 @@ export const Postcard = ({ isStarted, isPlaying, setFirstClouds, setIsStarted, s
 
         <postCardShaderMaterial ref={materialref} side={THREE.DoubleSide} attach="material" opacity={1} transparent uTextureOne={texture} uTextureTwo={texturetwo} isStarted={isStarted} />
 
+        <PositionalAudio
+          url={sound}
+          distance={100}
+
+          ref={soundref}
+        />
       </mesh>
     </>
   )

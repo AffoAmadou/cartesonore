@@ -31,7 +31,7 @@ export const Intro = () => {
 
   useEffect(() => {
     if (soundref.current) {
-      soundref.current.play()
+      // soundref.current.play()
     }
     let tl = GSAP.timeline({
       ease: 'sin.inOut',
@@ -57,12 +57,12 @@ export const Intro = () => {
 
         <introShaderMaterial ref={meshref} side={THREE.DoubleSide} attach="material" opacity={1} transparent uTextureOne={textures[0]} uTextureTwo={textures[1]} displacement={texturethree} />
 
-        <PositionalAudio
+        {/* <PositionalAudio
           url={sound}
           distance={1}
           ref={soundref}
           loopEnd={1}
-        />
+        /> */}
       </mesh>
     </>
   )

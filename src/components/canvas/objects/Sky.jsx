@@ -8,9 +8,9 @@ import GSAP from 'gsap'
 export const Sky = () => {
   const meshref = useRef(null)
 
-  useFrame(({ clock }) => {})
+  useFrame(({ clock }) => { })
 
-  useEffect(() => {}, [])
+  useEffect(() => { }, [])
 
   return (
     <>
@@ -27,7 +27,7 @@ export const SkyShaderMaterial = shaderMaterial(
   {
     uTime: 0.0,
     uColor: new THREE.Color(0xD3B1E7),
-    uBColor: new THREE.Color(0xFDFFEB),
+    uBColor: new THREE.Color(0xFCF4EE),
   },
   // vertex shader
   /*glsl*/`

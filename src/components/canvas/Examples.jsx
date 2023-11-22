@@ -17,6 +17,7 @@ import { Cloud } from './objects/Cloud'
 import { Kitchen } from './Kitchen'
 import { Lily } from './objects/Lily'
 import { Bedroom } from './Bedroom'
+import { Chien } from './objects/Chien'
 
 //!Scene Output scene
 export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
@@ -31,6 +32,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
   const [isCastle, setIsCastle] = useState(false)
   const [isPostcard, setIsPostcard] = useState(true)
   const [isLily, setIsLily] = useState(false)
+  const [isChien, setIsChien] = useState(false)
 
   const set = useThree((state) => state.set)
   const state = useThree((state) => state)
@@ -70,9 +72,11 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
               zoom={zoom}
               setZoom={setZoom}
               setIsLily={setIsLily}
+              setIsChien={setIsChien}
             />
 
             <Lily position={[0, -1.4, 0]} isLily={isLily} />
+            <Chien position={[-.4, -1.4, -2.40]} isChien={isChien} />
           </>
         )}
 

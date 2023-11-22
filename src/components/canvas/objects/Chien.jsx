@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { useRef, useEffect, useState } from 'react'
-import lily from "../../../../public/img/lily.png"
+import chien from "../../../../public/img/chien.png"
 import { useLoader } from '@react-three/fiber'
 import { PositionalAudio } from '@react-three/drei'
 import sound from '../../../../public/sound/lily.mp3'
@@ -10,9 +10,9 @@ import { EffectComposer, Outline } from '@react-three/postprocessing'
 import { KernelSize } from 'postprocessing'
 
 //!Clouds
-export const Lily = ({ position, isLily }) => {
+export const Chien = ({ position, isChien }) => {
   const [isCreated, setIsCreated] = useState(false)
-  let texture = useLoader(THREE.TextureLoader, lily.src)
+  let texture = useLoader(THREE.TextureLoader, chien.src)
   const [isHover, setIsHover] = useState(null)
   const soundref = useRef(null)
   const materialref = useRef(null)
@@ -21,7 +21,7 @@ export const Lily = ({ position, isLily }) => {
 
 
   useEffect(() => {
-    if (isLily) {
+    if (isChien) {
       GSAP.to(meshref.current.material, {
         delay: 1,
         duration: 2,
@@ -35,12 +35,11 @@ export const Lily = ({ position, isLily }) => {
       });
     }
 
-  }, [isLily])
+  }, [])
 
 
   //!HOVER EFFECT
   const handleHover = (e) => {
-    console.log(e, 'lily')
     setIsHover(e.object)
 
     let tl = GSAP.timeline({})
@@ -67,7 +66,6 @@ export const Lily = ({ position, isLily }) => {
   const playSound = () => {
     if (soundref.current) {
       soundref.current.play();
-      console.log(soundref.current.buffer.duration)
       const animatable = { distance: soundref.current.distance };
 
       GSAP.fromTo(
@@ -78,12 +76,11 @@ export const Lily = ({ position, isLily }) => {
           duration: 6,
           onUpdate: () => {
             soundref.current.distance = animatable.distance;
-
-            // console.log('update', soundref.current.distance);
+            console.log('update', soundref.current.distance);
           },
           onComplete: () => {
             soundref.current.stop();
-            // console.log('stop', soundref.current.distance);
+            console.log('stop', soundref.current.distance);
           }
         }
       );
@@ -104,8 +101,8 @@ export const Lily = ({ position, isLily }) => {
 
       </EffectComposer>
       <mesh ref={meshref} position={position} onPointerOut={handleNonHover} onPointerOver={(e) => handleHover(e)} onClick={playSound}>
-        <planeGeometry args={[.5, .8, 64, 64]} />
-        <meshBasicMaterial opacity={0} ref={materialref} side={THREE.DoubleSide} transparent map={texture} />
+        <planeGeometry args={[.4, .6, 64, 64]} />
+        <meshBasicMaterial opacity={1} ref={materialref} side={THREE.DoubleSide} transparent map={texture} />
         <PositionalAudio
           url={sound}
           distance={10}
