@@ -7,7 +7,7 @@ import sound from '../../../../public/sound/lily.mp3'
 import GSAP from 'gsap'
 
 //!Clouds
-export const Lily = ({ position, isLily, setOutlineObject }) => {
+export const Lily = ({ position, isLily }) => {
   const [isCreated, setIsCreated] = useState(false)
   let texture = useLoader(THREE.TextureLoader, lily.src)
   const [isHover, setIsHover] = useState(null)
@@ -55,10 +55,9 @@ export const Lily = ({ position, isLily, setOutlineObject }) => {
 
   const playSound = () => {
     if (soundref.current) {
-
-      soundref.current.play();
+      soundref.current.play()
       console.log(soundref.current.buffer.duration)
-      const animatable = { distance: soundref.current.distance };
+      const animatable = { distance: soundref.current.distance }
 
       GSAP.fromTo(
         animatable,
@@ -67,14 +66,13 @@ export const Lily = ({ position, isLily, setOutlineObject }) => {
           distance: 0.1,
           duration: 6,
           onUpdate: () => {
-            soundref.current.distance = animatable.distance;
+            soundref.current.distance = animatable.distance
           },
           onComplete: () => {
-            soundref.current.stop();
-          }
-        }
-      );
-
+            soundref.current.stop()
+          },
+        },
+      )
     }
   }
   return (
