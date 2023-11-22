@@ -37,6 +37,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
   const [isLily, setIsLily] = useState(false)
   const [isChien, setIsChien] = useState(false)
   const [isPathComplete, setIsPathComplete] = useState([false, false])
+  const [isLastScene, setIsLastScene] = useState(false)
 
   const [outlineObject, setOutlineObject] = useState(null)
 
@@ -44,6 +45,15 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
   const state = useThree((state) => state)
 
   let timeline = GSAP.timeline()
+
+  useEffect(() => {
+    if (isPathComplete[0] && isPathComplete[1]) {
+      console.log('le deux scene on été visité', isPathComplete)
+      setIsLastScene(true)
+    }
+  }, [isPathComplete]
+  )
+
 
   return (
     <>

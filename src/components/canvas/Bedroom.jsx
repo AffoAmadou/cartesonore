@@ -41,11 +41,28 @@ export const Bedroom = (props) => {
     let ang_rad = (state.camera.fov * Math.PI) / 180
     let fov_y = state.camera.position.z * Math.tan(ang_rad / 2) * 1
 
+    //!Gestion du son de la scene
     if (soundref.current) {
 
       soundref.current.play();
+      soundref.current.setRefDistance(2)
       console.log(soundref.current.buffer.duration)
+
+      let time = soundref.current.buffer.duration.toString().split('.')[0]
+      time *= 1000
+      console.log(time)
+
+
+      setTimeout(() => {
+        if (soundref.current) {
+          soundref.current.stop();
+          meshNavigationRef.current.material.opacity = 1
+          console.log('stop')
+        }
+      }, time + 1000);
     }
+
+
     let scaleMeshScene = GSAP.fromTo(
       meshSceneRef.current.scale,
       {
@@ -92,7 +109,7 @@ export const Bedroom = (props) => {
         }}
       >
         <planeGeometry args={[0.05, 0.05, 24, 24]} />
-        <meshBasicMaterial color={0x00ffff} />
+        <meshBasicMaterial opacity={0} color={0x00ffff} />
       </mesh>
 
       <mesh ref={meshSceneRef} position={[state.camera.position.x, state.camera.position.y, -0.83]}>

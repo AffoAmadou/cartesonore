@@ -44,6 +44,25 @@ export const Kitchen = (props) => {
     let ang_rad = (state.camera.fov * Math.PI) / 180
     let fov_y = state.camera.position.z * Math.tan(ang_rad / 2) * 1
 
+    if (soundref.current) {
+
+      soundref.current.play();
+      console.log(soundref.current.buffer.duration)
+
+      let time = soundref.current.buffer.duration.toString().split('.')[0]
+      time *= 1000
+      console.log(time)
+
+
+      setTimeout(() => {
+        if (soundref.current) {
+          soundref.current.stop();
+          meshNavigationRef.current.material.opacity = 1
+          console.log('stop')
+        }
+      }, time + 1000);
+    }
+
     let scaleMeshScene = GSAP.fromTo(
       meshSceneRef.current.scale,
       {
@@ -91,7 +110,7 @@ export const Kitchen = (props) => {
         scale={[1, 1, 1]}
       >
         <planeGeometry args={[0.05, 0.05, 24, 24]} />
-        <meshBasicMaterial color={0x00ffff} />
+        <meshBasicMaterial opacity={0} color={0x00ffff} />
       </mesh>
 
       <mesh ref={meshSceneRef} position={[state.camera.position.x, state.camera.position.y, -0.83]} scale={[1, 1, 1]}>
@@ -102,6 +121,7 @@ export const Kitchen = (props) => {
           uImage={textureKitchen}
           uDepthMap={textureDepthMapKitchen}
         />
+        <PositionalAudio url={sound} distance={10} ref={soundref} />
       </mesh>
     </group>
   )

@@ -76,11 +76,11 @@ export const Castle = (props) => {
 
           if (selectedObject.name === 'chambre1') {
             props.setIsPathComplete([true, props.isPathComplete[1]])
-            console.log('isPathc', isPathComplete)
+            console.log('isPathc', props.isPathComplete)
           }
           else {
             props.setIsPathComplete([props.isPathComplete[0], true])
-            console.log('isPathc', isPathComplete)
+            console.log('isPathc', props.isPathComplete)
           }
         }
       },
