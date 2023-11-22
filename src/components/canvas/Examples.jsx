@@ -18,6 +18,9 @@ import { Kitchen } from './Kitchen'
 import { Lily } from './objects/Lily'
 import { Bedroom } from './Bedroom'
 import { Chien } from './objects/Chien'
+import { EffectComposer, Outline } from '@react-three/postprocessing'
+import { KernelSize } from 'postprocessing'
+
 
 //!Scene Output scene
 export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
@@ -34,6 +37,8 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
   const [isLily, setIsLily] = useState(false)
   const [isChien, setIsChien] = useState(false)
 
+  const [outlineObject, setOutlineObject] = useState(null)
+
   const set = useThree((state) => state.set)
   const state = useThree((state) => state)
 
@@ -46,6 +51,17 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
 
         <Sky />
 
+        <EffectComposer multisampling={8} autoClear={false}>
+          <Outline
+            selection={outlineObject}
+            edgeStrength={10.0}
+            visibleEdgeColor={0xffff00}
+            hiddenEdgeColor={0x101010}
+            blur={true}
+            kernelSize={KernelSize.SMALL}
+          />
+        </EffectComposer>
+
         {isPostcard && (
           <Postcard
             isStarted={isStarted}
@@ -55,6 +71,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
             setIsStarted={setIsStarted}
             setIsCastle={setIsCastle}
             setIsPostcard={setIsPostcard}
+            setOutlineObject={setOutlineObject}
           />
         )}
 
@@ -66,26 +83,24 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
               rotation={[0.0, 1.5, 0]}
               scene2D={scene2D}
               setScene2D={setScene2D}
-              explore={explore}
-              setExplore={setExplore}
               timeline={timeline}
               zoom={zoom}
               setZoom={setZoom}
               setIsLily={setIsLily}
               setIsChien={setIsChien}
+              setOutlineObject={setOutlineObject}
             />
-
-            <Lily position={[0, -1.4, 0]} isLily={isLily} />
+            <Lily position={[0, -1.4, 0]} isLily={isLily} setOutlineObject={setOutlineObject} />
             <Chien position={[-.4, -1.4, -2.40]} isChien={isChien} />
           </>
         )}
 
         {scene2D === 'kitchen' && (
-          <Kitchen timeline={timeline} explore={scene2D} setScene2D={setScene2D} zoom={zoom} setZoom={setZoom} />
+          <Kitchen timeline={timeline} setScene2D={setScene2D} zoom={zoom} setZoom={setZoom} scene2D={scene2D} />
         )}
 
         {scene2D === 'bedroom' && (
-          <Bedroom timeline={timeline} explore={scene2D} setScene2D={setScene2D} zoom={zoom} setZoom={setZoom} />
+          <Bedroom timeline={timeline} setScene2D={setScene2D} zoom={zoom} setZoom={setZoom} scene2D={scene2D} />
         )}
 
         {/* //Apparition Nuages */}
