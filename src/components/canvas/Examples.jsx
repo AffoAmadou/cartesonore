@@ -16,9 +16,7 @@ import { Intro } from './objects/Intro'
 import { Cloud } from './objects/Cloud'
 import { Kitchen } from './Kitchen'
 import { Lily } from './objects/Lily'
-
-
-
+import { Bedroom } from './Bedroom'
 
 //!Scene Output scene
 export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
@@ -78,9 +76,12 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
           </>
         )}
 
-
         {scene2D === 'kitchen' && (
           <Kitchen timeline={timeline} explore={scene2D} setScene2D={setScene2D} zoom={zoom} setZoom={setZoom} />
+        )}
+
+        {scene2D === 'bedroom' && (
+          <Bedroom timeline={timeline} explore={scene2D} setScene2D={setScene2D} zoom={zoom} setZoom={setZoom} />
         )}
 
         {/* //Apparition Nuages */}

@@ -7,12 +7,12 @@ import { useEffect, useRef } from 'react'
 import { Pseudo3DShaderMaterial } from './Pseudo3DShaderMaterial'
 import GSAP from 'gsap'
 
-export const Kitchen = (props) => {
+export const Bedroom = (props) => {
   const depthMaterial = useRef()
   const geometryRef = useRef()
   const meshRef = useRef()
-  const textureKitchen = useTexture('../../../img/kitchen/kitchen.png')
-  const textureDepthMapKitchen = useTexture('../../../img/kitchen/kitchen_depthmap.png')
+  const textureKitchen = useTexture('../../../img/bedroom/bedroom.png')
+  const textureDepthMapKitchen = useTexture('../../../img/bedroom/bedroom_depthmap.png')
 
   let textures = [textureKitchen, textureDepthMapKitchen]
 
@@ -28,6 +28,7 @@ export const Kitchen = (props) => {
 
   const { getCurrentViewport } = useThree((state) => state.viewport)
   const { width, height } = getCurrentViewport(state.camera, [0, 0, 0])
+  const { gl } = useThree()
 
   useFrame((state) => (depthMaterial.current.uMouse = [state.pointer.x * 0.01, state.pointer.y * 0.01]))
 
@@ -51,6 +52,7 @@ export const Kitchen = (props) => {
       },
     )
 
+    console.log(state.camera.position)
     props.timeline.add(scaleMesh, 0)
   }, [])
 
