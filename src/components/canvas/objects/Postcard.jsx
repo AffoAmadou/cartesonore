@@ -22,6 +22,8 @@ export const Postcard = ({
   const materialref = useRef(null)
   const [animate, setAnimate] = useState(false)
   const [isFirstTime, setIsFirstTime] = useState(true)
+  const [isClicked, setClicked] = useState(false)
+
   let texture = useLoader(THREE.TextureLoader, carte.src)
   texture.colorSpace = THREE.LinearSRGBColorSpace
 
@@ -118,6 +120,9 @@ export const Postcard = ({
   const handleClick = () => {
     console.log('click')
 
+    setClicked(true)
+    setOutlineObject(null)
+
     let tl = GSAP.timeline({
       ease: 'expo.in',
       duration: 1,
@@ -153,6 +158,7 @@ export const Postcard = ({
 
   //!HOVER EFFECT
   const handleHover = (e) => {
+    if (isClicked) return
     setOutlineObject(e.object)
   }
 
@@ -162,13 +168,7 @@ export const Postcard = ({
 
   return (
     <>
-      <mesh
-        ref={meshref}
-        position={[0, 0, 0]}
-        onClick={handleClick}
-        onPointerOut={handleNonHover}
-        onPointerOver={(e) => handleHover(e)}
-      >
+      <mesh ref={meshref} position={[0, 0, 0]} onClick={handleClick}>
         <planeGeometry args={[7.86, 4.37, 64, 64]} />
 
         <postCardShaderMaterial
@@ -181,6 +181,18 @@ export const Postcard = ({
           uTextureTwo={texturetwo}
           isStarted={isStarted}
         />
+      </mesh>
+
+      <mesh
+        rotation={[0, 0, 0.45]}
+        scale={[0.3, 0.3, 0.3]}
+        position={[-0.098, 0, 0.1]}
+        onPointerOut={handleNonHover}
+        onPointerOver={(e) => handleHover(e)}
+        onClick={handleClick}
+      >
+        <planeGeometry args={[7.48, 4.15, 64, 64]} />
+        <meshBasicMaterial color='#ff0000' opacity={0} transparent />
       </mesh>
     </>
   )

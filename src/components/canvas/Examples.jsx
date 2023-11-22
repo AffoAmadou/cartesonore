@@ -59,16 +59,18 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
           />
         </EffectComposer>
 
-        <Postcard
-          isStarted={isStarted}
-          isPlaying={isPlaying}
-          setFirstClouds={setFirstClouds}
-          setLastClouds={setLastClouds}
-          setIsStarted={setIsStarted}
-          setIsCastle={setIsCastle}
-          setIsPostcard={setIsPostcard}
-          setOutlineObject={setOutlineObject}
-        />
+        {isPostcard && (
+          <Postcard
+            isStarted={isStarted}
+            isPlaying={isPlaying}
+            setFirstClouds={setFirstClouds}
+            setLastClouds={setLastClouds}
+            setIsStarted={setIsStarted}
+            setIsCastle={setIsCastle}
+            setIsPostcard={setIsPostcard}
+            setOutlineObject={setOutlineObject}
+          />
+        )}
 
         {isCastle && (
           <>
@@ -89,9 +91,13 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
           </>
         )}
 
-        {scene2D === 'kitchen' && <Kitchen timeline={timeline} setScene2D={setScene2D} zoom={zoom} setZoom={setZoom} />}
+        {scene2D === 'kitchen' && (
+          <Kitchen timeline={timeline} setScene2D={setScene2D} zoom={zoom} setZoom={setZoom} scene2D={scene2D} />
+        )}
 
-        {scene2D === 'bedroom' && <Bedroom timeline={timeline} setScene2D={setScene2D} zoom={zoom} setZoom={setZoom} />}
+        {scene2D === 'bedroom' && (
+          <Bedroom timeline={timeline} setScene2D={setScene2D} zoom={zoom} setZoom={setZoom} scene2D={scene2D} />
+        )}
 
         {/* //Apparition Nuages */}
         {firstClouds && (

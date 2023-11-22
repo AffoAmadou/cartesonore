@@ -34,8 +34,6 @@ export const Lily = ({ position, isLily, setOutlineObject }) => {
 
   //!HOVER EFFECT
   const handleHover = (e) => {
-    setOutlineObject(e.object)
-
     let tl = GSAP.timeline({})
     tl.to(e.object.scale, {
       duration: 0.5,
@@ -46,8 +44,6 @@ export const Lily = ({ position, isLily, setOutlineObject }) => {
   }
 
   const handleNonHover = () => {
-    setOutlineObject(null)
-
     let tl = GSAP.timeline({})
     tl.to(meshref.current.scale, {
       duration: 0.5,
