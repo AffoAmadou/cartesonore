@@ -5,22 +5,24 @@ import { useTexture } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useEffect, useRef, useState } from 'react'
 import { Pseudo3DShaderMaterial } from './Pseudo3DShaderMaterial'
+
 import GSAP from 'gsap'
 
 import { Lily } from './objects/Lily'
 
 import { PositionalAudio } from '@react-three/drei'
 
-import sound from '../../../public/sound/cuisine.mp3'
+
 import { Chien } from './objects/Chien'
+import sound from '../../../../public/sound/cuisine.mp3'
 
 export const Kitchen = (props) => {
   const depthMaterial = useRef()
   const geometryRef = useRef()
   const meshSceneRef = useRef()
   const meshNavigationRef = useRef()
-  const textureKitchen = useTexture('../../../img/kitchen/kitchen.png')
-  const textureDepthMapKitchen = useTexture('../../../img/kitchen/kitchen_depthmap.png')
+  const textureKitchen = useTexture('../../../../img/kitchen/kitchen.png')
+  const textureDepthMapKitchen = useTexture('../../../../img/kitchen/kitchen_depthmap.png')
 
   const [isLily, setIsLily] = useState(false)
   const [isChien, setIsChien] = useState(false)
@@ -50,23 +52,20 @@ export const Kitchen = (props) => {
     let fov_y = state.camera.position.z * Math.tan(ang_rad / 2) * 1
 
     if (soundref.current) {
-
-      soundref.current.play();
+      soundref.current.play()
       console.log(soundref.current.buffer.duration)
 
       let time = soundref.current.buffer.duration.toString().split('.')[0]
       time *= 1000
       console.log(time)
 
-
       setTimeout(() => {
         if (soundref.current) {
-          soundref.current.stop();
+          soundref.current.stop()
           meshNavigationRef.current.material.opacity = 1
           console.log('stop')
         }
-      }, time + 1000);
-
+      }, time + 1000)
     }
 
     let scaleMeshScene = GSAP.fromTo(
@@ -144,7 +143,7 @@ export const Kitchen = (props) => {
         <meshBasicMaterial color='#ff0000' opacity={0} transparent />
       </mesh>
 
-      <PositionalAudio url={sound} distance={10} ref={soundref} />
+      <PositionalAudio url={sound} distance={2} ref={soundref} />
     </group>
   )
 }

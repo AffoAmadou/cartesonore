@@ -14,13 +14,14 @@ import { Sky } from './objects/Sky'
 import { Castle } from './objects/Castle'
 import { Intro } from './objects/Intro'
 import { Cloud } from './objects/Cloud'
-import { Kitchen } from './Kitchen'
+import { Kitchen } from './scene2D/Kitchen'
 import { Lily } from './objects/Lily'
-import { Bedroom } from './Bedroom'
+import { Bedroom } from './scene2D/Bedroom'
 import { Chien } from './objects/Chien'
 import { EffectComposer, Outline } from '@react-three/postprocessing'
 import { KernelSize } from 'postprocessing'
 import { Corbeau } from './objects/Corbeau'
+import { Crow } from './scene2D/Crow'
 
 //!Scene Output scene
 export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
@@ -51,9 +52,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
       console.log('le deux scene on été visité', isPathComplete)
       setIsLastScene(true)
     }
-  }, [isPathComplete]
-  )
-
+  }, [isPathComplete])
 
   return (
     <>
@@ -200,9 +199,12 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
         )}
 
         {/* //Apparition Corbeau */}
-        {isPathComplete[0] && isPathComplete[1] && (
-          <Corbeau position={[2, .65, 0]} />
+        {isPathComplete[0] && isPathComplete[1] && <Corbeau position={[2, 0.65, 0]} setScene2D={setScene2D} />}
+
+        {scene2D === 'crow' && (
+          <Crow timeline={timeline} setScene2D={setScene2D} zoom={zoom} setZoom={setZoom} scene2D={scene2D} />
         )}
+
         <Stats />
       </group>
     </>
