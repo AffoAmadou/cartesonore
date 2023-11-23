@@ -201,7 +201,7 @@ export const Postcard = ({
                 duration: 1.4,
                 opacity: 0,
                 onComplete: () => {
-                  setIsPostcard(false)
+                  // setIsPostcard(false)
                 }
 
               })
