@@ -1,7 +1,7 @@
 import { useGLTF, shaderMaterial } from '@react-three/drei'
 import { useFrame, useLoader, extend } from '@react-three/fiber'
 import * as THREE from 'three'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import boite from "../../../../public/img/boite.png"
 import blanc from "../../../../public/img/blanc.png"
 import disp from "../../../../public/img/disp.jpg"
@@ -13,6 +13,7 @@ import sound from '../../../../public/sound/intro.mp3'
 export const Intro = () => {
   const meshref = useRef(null)
   const soundref = useRef(null)
+  const [isPlayed, setIsPlayed] = useState(false)
 
   let texture = useLoader(THREE.TextureLoader, blanc.src)
   texture.colorSpace = THREE.LinearSRGBColorSpace;
@@ -30,8 +31,15 @@ export const Intro = () => {
   });
 
   useEffect(() => {
-    if (soundref.current) {
-      // soundref.current.play()
+    if (soundref.current && !isPlayed) {
+      soundref.current.play()
+      let time = soundref.current.buffer.duration.toString().split('.')[0]
+      time *= 1000
+
+      setTimeout(() => {
+        soundref.current.stop()
+        setIsPlayed(true)
+      }, time)
     }
     let tl = GSAP.timeline({
       ease: 'sin.inOut',
@@ -57,12 +65,12 @@ export const Intro = () => {
 
         <introShaderMaterial ref={meshref} side={THREE.DoubleSide} attach="material" opacity={1} transparent uTextureOne={textures[0]} uTextureTwo={textures[1]} displacement={texturethree} />
 
-        {/* <PositionalAudio
+        <PositionalAudio
           url={sound}
           distance={1}
           ref={soundref}
           loopEnd={1}
-        /> */}
+        />
       </mesh>
     </>
   )

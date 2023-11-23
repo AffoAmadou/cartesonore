@@ -6,30 +6,41 @@ import { useFrame, useThree, extend } from '@react-three/fiber'
 import { useEffect, useRef, useState } from 'react'
 import GSAP from 'gsap'
 
-import { PositionalAudio } from '@react-three/drei'
-import sound from '../../../../public/sound/scene_corbeau_voix_off.mp3'
+import finUn from '../../../../public/sound/finUn.mp3'
+import finDeux from '../../../../public/sound/finDeu.mp3'
+import finDex from '../../../../public/sound/finDex.mp3'
+import finTrois from '../../../../public/sound/victoire.mp3'
+import finQuatre from '../../../../public/sound/calin.mp3'
 
-export const Crow = ({ timeline, setScene2D, scene2D }) => {
+
+import { PositionalAudio } from '@react-three/drei'
+
+export const Crow = ({ timeline, setIsLast, setScene2D, scene2D, setPaths, paths, setPostScene }) => {
   const geometryRef = useRef()
   const meshSceneRef = useRef()
   const meshNavigationRef = useRef()
   const materialref = useRef(null)
+
+  const [soundIndex, setSoundIndex] = useState(0)
+  const [isBtnVisible, setIsBtnVisible] = useState(false)
+
   const textureCrow = useTexture('../../../../img/corbeauScene.png')
   const destruction = useTexture('../../../../img/destruction.png')
   const bagarre = useTexture('../../../../img/bagarre.png')
   const calin = useTexture('../../../../img/calin.png')
   const win = useTexture('../../../../img/win.png')
+  const soeur = useTexture('../../../../img/soeur.png')
 
-
+  const sounds = [finUn, finDeux, finDex, finTrois, finQuatre]
 
   const soundref = useRef(null)
 
-  let textures = [textureCrow, destruction, bagarre, calin, win]
+  let textures = [textureCrow, destruction, bagarre, win, calin, soeur]
 
-  // textures = textures.map((texture) => {
-  //   texture.colorSpace = THREE.SRGBColorSpace
-  //   return texture
-  // })
+  textures = textures.map((texture) => {
+    texture.colorSpace = THREE.SRGBColorSpace
+    return texture
+  })
 
   const set = useThree((state) => state.set)
   const state = useThree((state) => state)
@@ -39,6 +50,8 @@ export const Crow = ({ timeline, setScene2D, scene2D }) => {
   const [currentTexture, setCurrentTexture] = useState(1)
   const [lastTexture, setLastTexture] = useState(0)
 
+  const [isLastScene, setIsLastScene] = useState(false)
+
   useFrame(({ clock }) => {
     materialref.current.uTime = clock.getElapsedTime()
   })
@@ -47,23 +60,12 @@ export const Crow = ({ timeline, setScene2D, scene2D }) => {
     let ang_rad = (state.camera.fov * Math.PI) / 180
     let fov_y = state.camera.position.z * Math.tan(ang_rad / 2) * 1
 
+    // console.log(meshNavigationRef.current.material.opacity, 'opacity')
+
+
     //!Gestion du son de la scene
     if (soundref.current) {
-      soundref.current.play()
-      soundref.current.setRefDistance(2)
-
-      console.log(soundref.current.buffer.duration)
-
-      let time = soundref.current.buffer.duration.toString().split('.')[0]
-      time *= 1000
-      console.log(time)
-
-      setTimeout(() => {
-        if (soundref.current) {
-          soundref.current.stop()
-          console.log('stop')
-        }
-      }, time + 1000)
+      playSound()
     }
 
     let scaleMeshScene = GSAP.fromTo(
@@ -82,23 +84,15 @@ export const Crow = ({ timeline, setScene2D, scene2D }) => {
       },
     )
 
-    let scaleMeshNavigation = GSAP.fromTo(
-      meshNavigationRef.current.scale,
-      {
-        x: 0,
-        y: 0,
-        z: 0,
-      },
-      {
-        x: 1,
-        y: 1,
-        z: 1,
-        duration: 1,
-        ease: 'power2.out',
-      },
-    )
+    // let scaleMeshNavigation = GSAP.to(
+    //   meshNavigationRef.current.material,
+    //   {
+    //     duration: 9,
+    //     opacity: 0
+    //   }
+    // )
 
-    timeline.add(scaleMeshScene, 0).add(scaleMeshNavigation, 1)
+    timeline.add(scaleMeshScene, 0)
 
     let tl = GSAP.timeline({})
 
@@ -109,35 +103,102 @@ export const Crow = ({ timeline, setScene2D, scene2D }) => {
     })
   }, [])
 
-  const animateProgress = () => {
+  const animateProgress = (bool = true) => {
 
-    GSAP.to(materialref.current, {
-      duration: 1, // Adjust the duration to control the transition speed
-      uProgress: 1,
-      ease: "linear",
-      onComplete: () => {
-        materialref.current.uProgress = 0;
+    console.log(soundIndex, 'soundIndex')
 
-        setLastTexture(currentTexture);
-        setCurrentTexture((currentTexture + 1) % textures.length);
-        materialref.current.uTextureOne = textures[currentTexture];
-        materialref.current.uTextureTwo = textures[lastTexture];
-      },
-    });
+    if (soundIndex === 5) {
+      setIsLast(false)
+      setPostScene(true)
+      setPaths([paths[0], paths[1], "#ff0000"])
+      setScene2D(null)
+    }
+    else {
+      GSAP.to(materialref.current, {
+        duration: 1,
+        uProgress: 1,
+        ease: "linear",
+        onComplete: () => {
+          materialref.current.uProgress = 0;
+
+          if (bool) {
+            setLastTexture(currentTexture);
+            setCurrentTexture((currentTexture + 1) % textures.length);
+
+            console.log(textures[currentTexture], 'currentTexture bool')
+            console.log(textures[lastTexture], 'lastTexture bool')
+          }
+
+          if (bool) {
+            materialref.current.uTextureOne = textures[currentTexture];
+            materialref.current.uTextureTwo = textures[lastTexture];
+          }
+          else {
+            materialref.current.uTextureOne = textures[currentTexture + 1];
+            materialref.current.uTextureTwo = textures[currentTexture + 1];
+          }
+          console.log(textures[currentTexture], 'currentTexture ')
+          console.log(textures[lastTexture], 'lastTexture ')
+
+          // setSoundIndex(soundIndex + 1);
+          if (bool) {
+            // setScene2D(null)
+            playSound()
+          }
+
+          setIsBtnVisible(false)
+        },
+      });
+    }
+
+    // else {
+    //   setScene2D(null)
+    // }
   };
+
+  const playSound = () => {
+    console.log('play')
+    soundref.current.play()
+    soundref.current.setRefDistance(2)
+
+
+    let time = soundref.current.buffer.duration.toString().split('.')[0]
+    time *= 1000
+    console.log(time, soundIndex)
+
+    setTimeout(() => {
+      if (soundIndex === 4) {
+        animateProgress(false)
+      }
+    }, time / 1.5)
+    setTimeout(() => {
+      if (soundref.current) {
+        soundref.current.stop()
+        console.log('stop')
+
+        setIsBtnVisible(true)
+        setSoundIndex(soundIndex + 1)
+      }
+    }, time)
+  }
+
   return (
     <group>
-      <mesh
-        ref={meshNavigationRef}
-        position={[-2.45, 1.1, 2]}
-        onPointerDown={() => {
-          // setScene2D(null)
-          animateProgress()
-        }}
-      >
-        <planeGeometry args={[0.4, 0.4, 24, 24]} />
-        <meshBasicMaterial opacity={1} color={0x00ffff} />
-      </mesh>
+      {
+        isBtnVisible &&
+        <mesh
+          ref={meshNavigationRef}
+          position={[-2.45, 1.1, 2]}
+          onPointerDown={() => {
+            // setScene2D(null)
+
+            animateProgress()
+          }}
+        >
+          <planeGeometry args={[0.4, 0.4, 24, 24]} />
+          <meshBasicMaterial opacity={1} color={0x00ffff} />
+        </mesh>
+      }
 
       <mesh ref={meshSceneRef} position={[state.camera.position.x, state.camera.position.y, 1.1]}>
         <planeGeometry ref={geometryRef} />
@@ -154,8 +215,29 @@ export const Crow = ({ timeline, setScene2D, scene2D }) => {
       </mesh>
 
 
+      {soundIndex === 0 && (
+        <PositionalAudio url={sounds[soundIndex]} distance={2} ref={soundref} />
+      )
+      }
+      {soundIndex === 1 && (
+        <PositionalAudio url={sounds[soundIndex]} distance={2} ref={soundref} />
+      )
+      }
 
-      <PositionalAudio url={sound} distance={2} ref={soundref} />
+      {soundIndex === 2 && (
+        <PositionalAudio url={sounds[soundIndex]} distance={2} ref={soundref} />
+      )
+      }
+
+      {soundIndex === 3 && (
+        <PositionalAudio url={sounds[soundIndex]} distance={2} ref={soundref} />
+      )
+      }
+
+      {soundIndex === 4 && (
+        <PositionalAudio url={sounds[soundIndex]} distance={2} ref={soundref} />
+      )
+      }
     </group>
   )
 }

@@ -24,7 +24,7 @@ import { Corbeau } from './objects/Corbeau'
 import { Crow } from './scene2D/Crow'
 
 //!Scene Output scene
-export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
+export const Scene = ({ isStarted, isPlaying, setIsStarted, paths, setPaths }) => {
   const meshref = useRef(null)
 
   const [explore, setExplore] = useState(false)
@@ -37,8 +37,14 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
   const [isPostcard, setIsPostcard] = useState(true)
   const [isLily, setIsLily] = useState(false)
   const [isChien, setIsChien] = useState(false)
-  const [isPathComplete, setIsPathComplete] = useState([true, true])
+  const [isPathComplete, setIsPathComplete] = useState([false, false])
   const [isLastScene, setIsLastScene] = useState(false)
+
+  const [postScene, setPostScene] = useState(false)
+
+  const [castlePosition, setCastlePosition] = useState([0, -2, -3.7])
+
+
 
   const [outlineObject, setOutlineObject] = useState(null)
 
@@ -50,17 +56,28 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
   useEffect(() => {
     if (isPathComplete[0] && isPathComplete[1]) {
       console.log('le deux scene on été visité', isPathComplete)
+      setPaths([paths[0], "#ff0000", "#ffffff"])
+
       setIsLastScene(true)
+    }
+    else if (isPathComplete[0] || isPathComplete[1]) {
+      setPaths(["#ff0000", paths[1], paths[2]])
     }
   }, [isPathComplete])
 
+  useEffect(() => {
+    if (postScene) {
+      setCastlePosition([0, -2, -5.7])
+    }
+  }
+    , [postScene])
   return (
     <>
       <group position={[0, 0, 0]}>
-        {isStarted && <Intro />}
+        {!isStarted && <Intro />}
 
         <Sky />
-        {/* 
+
         <EffectComposer multisampling={8} autoClear={false}>
           <Outline
             selection={outlineObject}
@@ -70,9 +87,9 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
             blur={true}
             kernelSize={KernelSize.SMALL}
           />
-        </EffectComposer> */}
+        </EffectComposer>
 
-        {!isPostcard && (
+        {isPostcard && (
           <Postcard
             isStarted={isStarted}
             isPlaying={isPlaying}
@@ -89,8 +106,10 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
           <>
             <Castle
               scale={0.34}
-              position={[0, -2, -3.7]}
+
+              position={castlePosition}
               rotation={[0.0, 1.5, 0]}
+
               scene2D={scene2D}
               setScene2D={setScene2D}
               timeline={timeline}
@@ -116,7 +135,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
         )}
 
         {/* //Apparition Nuages */}
-        {!firstClouds && (
+        {firstClouds && (
           <>
             <Cloud image='1' position={[-2.6, -1.7, 1]} size={{ width: 4, height: 2 }} />
             <Cloud image='2' position={[0.1, -2.1, 1]} size={{ width: 3.3, height: 1.8 }} />
@@ -124,7 +143,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
           </>
         )}
         {/* Apparition nuages de fond  */}
-        {!lastClouds && (
+        {lastClouds && (
           <>
             {/* middle*/}
             <Cloud
@@ -199,10 +218,10 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
         )}
 
         {/* //Apparition Corbeau */}
-        {isPathComplete[0] && isPathComplete[1] && <Corbeau position={[2, 0.65, 0]} setScene2D={setScene2D} />}
+        {isLastScene && <Corbeau position={[2, 0.65, 0]} setScene2D={setScene2D} />}
 
         {scene2D === 'crow' && (
-          <Crow timeline={timeline} setScene2D={setScene2D} zoom={zoom} setZoom={setZoom} scene2D={scene2D} />
+          <Crow setPostScene={setPostScene} setIsLast={setIsLastScene} timeline={timeline} setScene2D={setScene2D} zoom={zoom} setZoom={setZoom} scene2D={scene2D} setPaths={setPaths} paths={paths} />
         )}
 
         <Stats />

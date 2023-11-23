@@ -53,3 +53,20 @@
 #Calque_2 {
   width: 7rem;
 }
+
+
+#Livello_1 {
+  position: fixed;
+  width   : 17rem;
+  top     : 0;
+  right   : 0;
+  z-index : 999999;
+}
+
+
+.load {
+  position: fixed;
+  top     : 0;
+  left    : 0;
+  z-index : 99;
+}

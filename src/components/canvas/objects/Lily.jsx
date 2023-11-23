@@ -56,23 +56,32 @@ export const Lily = ({ position, isLily, args }) => {
   const playSound = () => {
     if (soundref.current) {
       soundref.current.play()
-      console.log(soundref.current.buffer.duration)
       const animatable = { distance: soundref.current.distance }
 
-      GSAP.fromTo(
-        animatable,
-        { distance: soundref.current.distance },
-        {
-          distance: 0.1,
-          duration: 6,
-          onUpdate: () => {
-            soundref.current.distance = animatable.distance
-          },
-          onComplete: () => {
-            soundref.current.stop()
-          },
-        },
-      )
+      // GSAP.fromTo(
+      //   animatable,
+      //   { distance: soundref.current.distance },
+      //   {
+      //     distance: 0.1,
+      //     duration: 6,
+      //     onUpdate: () => {
+      //       // soundref.current.distance = animatable.distance
+      //       // console.log('update', soundref.current.distance)
+      //     },
+      //     onComplete: () => {
+      //       soundref.current.stop()
+      //       // console.log('stop', soundref.current.distance)
+      //     },
+      //   },
+      // )
+
+      let time = soundref.current.buffer.duration.toString().split('.')[0]
+      time *= 1000
+
+      setTimeout(() => {
+        if (soundref.current)
+          soundref.current.stop()
+      }, time)
     }
   }
   return (
@@ -84,7 +93,7 @@ export const Lily = ({ position, isLily, args }) => {
         onPointerOver={(e) => handleHover(e)}
         onClick={playSound}
       >
-        <planeGeometry args={[0.5, 0.8, 64, 64]} />
+        <planeGeometry args={args} />
         <meshBasicMaterial opacity={0} ref={materialref} side={THREE.DoubleSide} transparent map={texture} />
         <PositionalAudio url={sound} distance={10} ref={soundref} />
       </mesh>
