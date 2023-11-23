@@ -4,7 +4,7 @@ import corbeau from '../../../../public/img/corbeau.png'
 import corbeauVolant from '../../../../public/img/corbeauVolant.png'
 import { useLoader } from '@react-three/fiber'
 import { PositionalAudio } from '@react-three/drei'
-import sound from '../../../../public/sound/lily.mp3'
+import sound from '../../../../public/sound/crow.mp3'
 import GSAP from 'gsap'
 
 //!Clouds
@@ -45,17 +45,18 @@ export const Corbeau = ({ position, setScene2D }) => {
       soundref.current.play()
       console.log(soundref.current.buffer.duration)
       const animatable = { distance: soundref.current.distance }
-
-      GSAP.fromTo(
+      let tl = GSAP.timeline({})
+      tl.fromTo(
         animatable,
         { distance: soundref.current.distance },
         {
           distance: 0.1,
           duration: 2,
           onUpdate: () => {
-            soundref.current.distance = animatable.distance
-            soundref.current.stop()
-            setScene2D('crow')
+            if (tl.progress() > 0.5) {
+              soundref.current.distance = animatable.distance
+              soundref.current.stop()
+            }
           },
           onComplete: () => {
             soundref.current.stop()

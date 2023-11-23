@@ -37,7 +37,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
   const [isPostcard, setIsPostcard] = useState(true)
   const [isLily, setIsLily] = useState(false)
   const [isChien, setIsChien] = useState(false)
-  const [isPathComplete, setIsPathComplete] = useState([false, false])
+  const [isPathComplete, setIsPathComplete] = useState([true, true])
   const [isLastScene, setIsLastScene] = useState(false)
 
   const [outlineObject, setOutlineObject] = useState(null)
@@ -60,7 +60,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
         {isStarted && <Intro />}
 
         <Sky />
-
+        {/* 
         <EffectComposer multisampling={8} autoClear={false}>
           <Outline
             selection={outlineObject}
@@ -70,7 +70,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
             blur={true}
             kernelSize={KernelSize.SMALL}
           />
-        </EffectComposer>
+        </EffectComposer> */}
 
         {!isPostcard && (
           <Postcard
