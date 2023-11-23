@@ -3,12 +3,14 @@
 import * as THREE from 'three'
 import { useTexture } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Pseudo3DShaderMaterial } from './Pseudo3DShaderMaterial'
 import GSAP from 'gsap'
 
 import { PositionalAudio } from '@react-three/drei'
 import sound from '../../../public/sound/chambre.mp3'
+import { Lily } from './objects/Lily'
+import { Chien } from './objects/Chien'
 
 export const Bedroom = (props) => {
   const depthMaterial = useRef()
@@ -17,6 +19,10 @@ export const Bedroom = (props) => {
   const meshNavigationRef = useRef()
   const textureKitchen = useTexture('../../../img/bedroom/bedroom.png')
   const textureDepthMapKitchen = useTexture('../../../img/bedroom/bedroom_depthmap.png')
+
+
+  const [isLily, setIsLily] = useState(false)
+  const [isChien, setIsChien] = useState(false)
 
   const soundref = useRef(null)
 
@@ -93,6 +99,13 @@ export const Bedroom = (props) => {
         z: 1,
         duration: 1,
         ease: 'power2.out',
+        onComplete: () => {
+
+          setIsLily(true)
+          setIsChien(true)
+
+
+        }
       },
     )
 
@@ -101,6 +114,9 @@ export const Bedroom = (props) => {
 
   return (
     <group>
+      <Lily position={[state.camera.position.x / .87, state.camera.position.y / .77, -0.5]} isLily={isLily} args={[0.16, 0.25, 64, 64]} />
+
+      <Chien position={[state.camera.position.x / 1.2, state.camera.position.y / .57, -0.5]} isChien={isChien} args={[0.17, 0.24, 64, 64]} />
       <mesh
         ref={meshNavigationRef}
         position={[state.camera.position.x / 0.728, state.camera.position.y / 4.6, -0.5]}

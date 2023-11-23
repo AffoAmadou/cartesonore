@@ -7,7 +7,7 @@ import sound from '../../../../public/sound/lily.mp3'
 import GSAP from 'gsap'
 
 //!Clouds
-export const Lily = ({ position, isLily }) => {
+export const Lily = ({ position, isLily, args }) => {
   const [isCreated, setIsCreated] = useState(false)
   let texture = useLoader(THREE.TextureLoader, lily.src)
   const [isHover, setIsHover] = useState(null)
@@ -23,11 +23,11 @@ export const Lily = ({ position, isLily }) => {
         duration: 2,
         opacity: 1,
         ease: 'linear',
-        onUpdate: () => {
-          if (meshref.current) {
-            setOpacity(meshref.current.material.opacity)
-          }
-        },
+        // onUpdate: () => {
+        //   if (meshref.current) {
+        //     setOpacity(meshref.current.material.opacity)
+        //   }
+        // },
       })
     }
   }, [isLily])
@@ -84,7 +84,7 @@ export const Lily = ({ position, isLily }) => {
         onPointerOver={(e) => handleHover(e)}
         onClick={playSound}
       >
-        <planeGeometry args={[0.5, 0.8, 64, 64]} />
+        <planeGeometry args={args} />
         <meshBasicMaterial opacity={0} ref={materialref} side={THREE.DoubleSide} transparent map={texture} />
         <PositionalAudio url={sound} distance={10} ref={soundref} />
       </mesh>

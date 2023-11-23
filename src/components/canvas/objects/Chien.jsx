@@ -7,7 +7,7 @@ import sound from '../../../../public/sound/lily.mp3'
 import GSAP from 'gsap'
 
 //!Clouds
-export const Chien = ({ position, isChien }) => {
+export const Chien = ({ position, isChien, args }) => {
   const [isCreated, setIsCreated] = useState(false)
   let texture = useLoader(THREE.TextureLoader, chien.src)
   const soundref = useRef(null)
@@ -18,18 +18,18 @@ export const Chien = ({ position, isChien }) => {
   useEffect(() => {
     if (isChien) {
       GSAP.to(meshref.current.material, {
-        delay: 1,
+        delay: 1.5,
         duration: 2,
         opacity: 1,
         ease: 'linear',
-        onUpdate: () => {
-          if (meshref.current) {
-            setOpacity(meshref.current.material.opacity)
-          }
-        },
+        // onUpdate: () => {
+        //   if (meshref.current) {
+        //     setOpacity(meshref.current.material.opacity)
+        //   }
+        // },
       })
     }
-  }, [])
+  }, [isChien])
 
   //!HOVER EFFECT
   const handleHover = (e) => {
@@ -85,8 +85,8 @@ export const Chien = ({ position, isChien }) => {
         onClick={playSound}
         scale={[0.8, 0.8, 0.8]}
       >
-        <planeGeometry args={[0.4, 0.6, 64, 64]} />
-        <meshBasicMaterial opacity={1} ref={materialref} side={THREE.DoubleSide} transparent map={texture} />
+        <planeGeometry args={args} />
+        <meshBasicMaterial opacity={0} ref={materialref} side={THREE.DoubleSide} transparent map={texture} />
         <PositionalAudio url={sound} distance={10} ref={soundref} />
       </mesh>
     </>

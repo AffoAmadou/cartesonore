@@ -103,8 +103,8 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
               setIsPathComplete={setIsPathComplete}
               isPathComplete={isPathComplete}
             />
-            <Lily position={[0, -1.4, 0]} isLily={isLily} />
-            <Chien position={[-0.5, -1.4, 0]} isChien={isChien} />
+            <Lily position={[0, -1.4, 0]} isLily={isLily} args={[0.5, 0.8, 64, 64]} />
+            <Chien position={[-0.5, -1.4, 0]} isChien={isChien} args={[0.4, 0.6, 64, 64]} />
           </>
         )}
 

@@ -73,6 +73,7 @@ export default function Page() {
 
   const [fogColor, setFogColor] = useState('#ffCBB3')
   const colors = ['#b3c3ff', '#ffCBB3', '#5caeb1']
+  // colors = ['#3B274F', '#202227', '#27344F']
   const colorIndexRef = useRef(0)
 
   useEffect(() => {
@@ -84,8 +85,8 @@ export default function Page() {
       GSAP.to(
         {},
         {
-          delay: 15,
-          duration: 15,
+          delay: 1,
+          duration: 5,
           onUpdate: function () {
             const newColor = GSAP.utils.interpolate(colors[colorIndexRef.current], colors[nextIndex], this.progress())
             setFogColor(newColor)
