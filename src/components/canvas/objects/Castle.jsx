@@ -36,8 +36,7 @@ export const Castle = (props) => {
       console.log('cuisine1')
       props.setZoom(true)
       setSelectedObject(focusRef.object)
-    }
-    else {
+    } else {
       console.log('nope')
       props.setZoom(false)
       setSelectedObject(null)
@@ -56,9 +55,9 @@ export const Castle = (props) => {
 
     if (props.zoom) {
       if (selectedObject.name === 'chambre1') {
-        positionVec.set(-0.6, -0.6, 0)
+        positionVec.set(-0.83, -0.18, 0)
       } else {
-        positionVec.set(0.6, -0.6, 0)
+        positionVec.set(0.83, -0.3, 0)
       }
     } else {
       positionVec.set(0, 0, 6)
@@ -81,6 +80,7 @@ export const Castle = (props) => {
           else {
             props.setIsPathComplete([props.isPathComplete[0], true])
             console.log('isPathc', props.isPathComplete)
+
           }
         }
       },

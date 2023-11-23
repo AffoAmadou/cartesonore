@@ -33,20 +33,18 @@ const defaultOptions = {
   autoplay: true,
   animationData: intros,
   rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice"
-  }
-};
+    preserveAspectRatio: 'xMidYMid slice',
+  },
+}
 
 const chereOptions = {
-
   // loop: true,
   autoplay: true,
   animationData: chere,
   rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice"
-  }
-};
-
+    preserveAspectRatio: 'xMidYMid slice',
+  },
+}
 
 export default function Page() {
   const [isIntroClicked, setIsIntroClicked] = useState(false)
@@ -57,14 +55,12 @@ export default function Page() {
   // const colors = ['#b3c3ff', '#ffCBB3', '#5caeb1'];
   // const [colorIndex, setColorIndex] = useState(0);
 
-
   const handleIntroClick = () => {
     setIsIntroClicked(true)
     setIsStarted(true)
   }
 
   //useEffect(() => {
-
 
   //With GSAP every 30 seconds, add 1 to the colorIndex state if its=2 then set it to 0
 
@@ -75,40 +71,41 @@ export default function Page() {
   //   , 30000);
   // });
 
-
-  const [fogColor, setFogColor] = useState('#ffCBB3');
-  const colors = ['#b3c3ff', '#ffCBB3', '#5caeb1'];
-  const colorIndexRef = useRef(0);
+  const [fogColor, setFogColor] = useState('#ffCBB3')
+  const colors = ['#b3c3ff', '#ffCBB3', '#5caeb1']
+  const colorIndexRef = useRef(0)
 
   useEffect(() => {
-    const getNextIndex = () => (colorIndexRef.current + 1) % colors.length;
+    const getNextIndex = () => (colorIndexRef.current + 1) % colors.length
 
     const animateColorTransition = () => {
-      const nextIndex = getNextIndex();
+      const nextIndex = getNextIndex()
 
-      GSAP.to({}, {
-        delay: 15,
-        duration: 15,
-        onUpdate: function () {
-          const newColor = GSAP.utils.interpolate(colors[colorIndexRef.current], colors[nextIndex], this.progress());
-          setFogColor(newColor);
+      GSAP.to(
+        {},
+        {
+          delay: 15,
+          duration: 15,
+          onUpdate: function () {
+            const newColor = GSAP.utils.interpolate(colors[colorIndexRef.current], colors[nextIndex], this.progress())
+            setFogColor(newColor)
+          },
+          onComplete: () => {
+            colorIndexRef.current = nextIndex
+            animateColorTransition()
+          },
         },
-        onComplete: () => {
-          colorIndexRef.current = nextIndex;
-          animateColorTransition();
-        }
-      });
-    };
+      )
+    }
 
-    animateColorTransition();
-  }, []);
+    animateColorTransition()
+  }, [])
   return (
     <>
       <div className='scene absolute'>
-
         <View orbit={false} className='relative h-full  sm:w-full'>
           <Suspense fallback={null}>
-            <fog attach='fog' color={fogColor} near={6} far={16} />
+            <fog attach='fog' color={fogColor} near={8} far={16} />
             <Scene setIsStarted={setIsStarted} isStarted={isStarted} isPlaying={isPlaying} />
             <Common color={'#000000'} />
           </Suspense>
