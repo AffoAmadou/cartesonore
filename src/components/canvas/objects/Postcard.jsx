@@ -28,7 +28,6 @@ export const Postcard = ({
   const soundref = useRef(null)
   const [isClicked, setClicked] = useState(false)
 
-
   let texture = useLoader(THREE.TextureLoader, carte.src)
   texture.colorSpace = THREE.LinearSRGBColorSpace
 
@@ -92,28 +91,33 @@ export const Postcard = ({
           if (tl.progress() > 0.5) {
             setFirstClouds(true)
           }
-        }
-      }, "-=1");
-
-    tl.to(meshref.current.position, {
-      duration: 2.5,
-      y: -2.3,
-      ease: "power1.out",
-
-      onUpdate: () => {
-        if (tl.progress() > 0.9) {
-          setLastClouds(true)
-        }
-
-        if (tl.progress() > 0.95) {
-          // setIsCastle(true)
-        }
+        },
       },
-      onComplete: () => {
-        // setIsPostcard(false)
-      }
-    }, "-=2");
+      '-=1',
+    )
 
+    tl.to(
+      meshref.current.position,
+      {
+        duration: 2.5,
+        y: -2.3,
+        ease: 'power1.out',
+
+        onUpdate: () => {
+          if (tl.progress() > 0.9) {
+            setLastClouds(true)
+          }
+
+          if (tl.progress() > 0.95) {
+            // setIsCastle(true)
+          }
+        },
+        onComplete: () => {
+          // setIsPostcard(false)
+        },
+      },
+      '-=2',
+    )
 
     tl.to(
       meshref.current.position,
@@ -143,9 +147,10 @@ export const Postcard = ({
   const handleClick = () => {
     console.log('click')
 
+    if (isClicked) return
+
     setClicked(true)
     setOutlineObject(null)
-
 
     let tl = GSAP.timeline({
       ease: 'expo.in',
@@ -175,10 +180,9 @@ export const Postcard = ({
       z: 1,
 
       onComplete: () => {
-
         // setIsStarted(true)
         if (soundref.current) {
-          soundref.current.play();
+          soundref.current.play()
           console.log(soundref.current.buffer.duration)
 
           let time = soundref.current.buffer.duration.toString().split('.')[0]
@@ -186,15 +190,14 @@ export const Postcard = ({
           console.log(time)
 
           setTimeout(() => {
-
             setIsStarted(true)
 
             console.log('start to move the post card')
-          }, time - 30000);
+          }, time - 30000)
 
           setTimeout(() => {
             if (soundref.current) {
-              soundref.current.stop();
+              soundref.current.stop()
               console.log('stop')
 
               GSAP.to(meshref.current.material, {
@@ -202,17 +205,13 @@ export const Postcard = ({
                 opacity: 0,
                 onComplete: () => {
                   // setIsPostcard(false)
-                }
-
+                },
               })
-
             }
-          }, time + 1000);
+          }, time + 1000)
         }
-
-      }
-    });
-
+      },
+    })
   }
 
   //!HOVER EFFECT
@@ -242,12 +241,7 @@ export const Postcard = ({
         />
       </mesh>
 
-
-      <PositionalAudio
-        url={sound}
-        distance={100}
-        ref={soundref}
-      />
+      <PositionalAudio url={sound} distance={100} ref={soundref} />
 
       <mesh
         rotation={[0, 0, 0.45]}

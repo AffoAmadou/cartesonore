@@ -8,7 +8,7 @@ import sound from '../../../../public/sound/lily.mp3'
 import GSAP from 'gsap'
 
 //!Clouds
-export const Corbeau = ({ position }) => {
+export const Corbeau = ({ position, setScene2D }) => {
   const [isCreated, setIsCreated] = useState(false)
   let texture = useLoader(THREE.TextureLoader, corbeauVolant.src)
   const [isHover, setIsHover] = useState(null)
@@ -17,9 +17,7 @@ export const Corbeau = ({ position }) => {
   const meshref = useRef(null)
   const [opacity, setOpacity] = useState(0)
 
-  useEffect(() => {
-
-  }, [])
+  useEffect(() => {}, [])
 
   //!HOVER EFFECT
   const handleHover = (e) => {
@@ -53,12 +51,15 @@ export const Corbeau = ({ position }) => {
         { distance: soundref.current.distance },
         {
           distance: 0.1,
-          duration: 6,
+          duration: 2,
           onUpdate: () => {
             soundref.current.distance = animatable.distance
+            soundref.current.stop()
+            setScene2D('crow')
           },
           onComplete: () => {
             soundref.current.stop()
+            setScene2D('crow')
           },
         },
       )

@@ -4,19 +4,19 @@ import * as THREE from 'three'
 import { useTexture } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useEffect, useRef } from 'react'
-import { Pseudo3DShaderMaterial } from './Pseudo3DShaderMaterial'
+import { Pseudo3DShaderMaterial } from '../Pseudo3DShaderMaterial'
 import GSAP from 'gsap'
 
 import { PositionalAudio } from '@react-three/drei'
-import sound from '../../../public/sound/chambre.mp3'
+import sound from '../../../../public/sound/chambre.mp3'
 
 export const Bedroom = (props) => {
   const depthMaterial = useRef()
   const geometryRef = useRef()
   const meshSceneRef = useRef()
   const meshNavigationRef = useRef()
-  const textureKitchen = useTexture('../../../img/bedroom/bedroom.png')
-  const textureDepthMapKitchen = useTexture('../../../img/bedroom/bedroom_depthmap.png')
+  const textureKitchen = useTexture('../../../../img/bedroom/bedroom.png')
+  const textureDepthMapKitchen = useTexture('../../../../img/bedroom/bedroom_depthmap.png')
 
   const soundref = useRef(null)
 
@@ -42,9 +42,7 @@ export const Bedroom = (props) => {
 
     //!Gestion du son de la scene
     if (soundref.current) {
-
-
-      soundref.current.play();
+      soundref.current.play()
       soundref.current.setRefDistance(2)
 
       console.log(soundref.current.buffer.duration)
@@ -53,16 +51,14 @@ export const Bedroom = (props) => {
       time *= 1000
       console.log(time)
 
-
       setTimeout(() => {
         if (soundref.current) {
-          soundref.current.stop();
+          soundref.current.stop()
           meshNavigationRef.current.material.opacity = 1
           console.log('stop')
         }
-      }, time + 1000);
+      }, time + 1000)
     }
-
 
     let scaleMeshScene = GSAP.fromTo(
       meshSceneRef.current.scale,
