@@ -30,6 +30,10 @@ export const Crow = ({ timeline, setScene2D, scene2D }) => {
   const { getCurrentViewport } = useThree((state) => state.viewport)
   const { width, height } = getCurrentViewport(state.camera, [0, 0, 1.1])
 
+  useFrame(({ clock }) => {
+    meshSceneRef.current.uTime = clock.getElapsedTime()
+  })
+
   useEffect(() => {
     let ang_rad = (state.camera.fov * Math.PI) / 180
     let fov_y = state.camera.position.z * Math.tan(ang_rad / 2) * 1
@@ -103,10 +107,52 @@ export const Crow = ({ timeline, setScene2D, scene2D }) => {
 
       <mesh ref={meshSceneRef} position={[state.camera.position.x, state.camera.position.y, 1.1]}>
         <planeGeometry ref={geometryRef} />
-        <meshBasicMaterial attach='material' map={textureCrow} />
+        {/* <meshBasicMaterial attach='material' map={textureCrow} /> */}
+        <postCardShaderMaterial
+          attach='material'
+          uTextureOne={textureCrow}
+          uTextureTwo={textureCrow}
+          transparent
+          uTime={0}
+          side={THREE.DoubleSide}
+        />
       </mesh>
 
       <PositionalAudio url={sound} distance={2} ref={soundref} />
     </group>
   )
 }
+
+
+export const PostCardShaderMaterial = shaderMaterial(
+  {
+    uTime: 0.0,
+    uTextureOne: new THREE.Texture(),
+  },
+  // vertex shader
+  /*glsl*/ `
+    varying vec2 vUv;
+    uniform float uTime;
+
+    void main() {
+      vUv = uv;
+      vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+      gl_Position = projectionMatrix * viewMatrix * worldPosition;  
+    }
+  `,
+  // fragment shader
+  /*glsl*/ `
+    uniform sampler2D uTextureOne;
+    varying vec2 vUv;
+
+  void main() {
+  
+  vec4 imageOne = texture2D(uTextureOne, vUv);
+
+  gl_FragColor = imageOne;
+    }
+  `,
+)
+PostCardShaderMaterial.transparent = true
+PostCardShaderMaterial.depthWrite = false
+extend({ PostCardShaderMaterial })

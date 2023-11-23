@@ -5,12 +5,12 @@ import { useTexture } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 
 import { useEffect, useRef, useState } from 'react'
-import { Pseudo3DShaderMaterial } from './Pseudo3DShaderMaterial'
+import { Pseudo3DShaderMaterial } from '../Pseudo3DShaderMaterial'
 import GSAP from 'gsap'
 
 import { PositionalAudio } from '@react-three/drei'
-import { Lily } from './objects/Lily'
-import { Chien } from './objects/Chien'
+import { Lily } from '../objects/Lily'
+import { Chien } from '../objects/Chien'
 
 import sound from '../../../../public/sound/chambre.mp3'
 

@@ -17,7 +17,7 @@ export const Corbeau = ({ position, setScene2D }) => {
   const meshref = useRef(null)
   const [opacity, setOpacity] = useState(0)
 
-  useEffect(() => {}, [])
+  useEffect(() => { }, [])
 
   //!HOVER EFFECT
   const handleHover = (e) => {

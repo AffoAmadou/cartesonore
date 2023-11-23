@@ -4,16 +4,16 @@ import * as THREE from 'three'
 import { useTexture } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useEffect, useRef, useState } from 'react'
-import { Pseudo3DShaderMaterial } from './Pseudo3DShaderMaterial'
+import { Pseudo3DShaderMaterial } from '../Pseudo3DShaderMaterial'
 
 import GSAP from 'gsap'
 
-import { Lily } from './objects/Lily'
+import { Lily } from '../objects/Lily'
 
 import { PositionalAudio } from '@react-three/drei'
 
 
-import { Chien } from './objects/Chien'
+import { Chien } from '../objects/Chien'
 import sound from '../../../../public/sound/cuisine.mp3'
 
 export const Kitchen = (props) => {

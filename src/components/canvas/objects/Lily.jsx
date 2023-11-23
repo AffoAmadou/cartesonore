@@ -84,7 +84,7 @@ export const Lily = ({ position, isLily, args }) => {
         onPointerOver={(e) => handleHover(e)}
         onClick={playSound}
       >
-        <planeGeometry args={args} />
+        <planeGeometry args={[0.5, 0.8, 64, 64]} />
         <meshBasicMaterial opacity={0} ref={materialref} side={THREE.DoubleSide} transparent map={texture} />
         <PositionalAudio url={sound} distance={10} ref={soundref} />
       </mesh>
