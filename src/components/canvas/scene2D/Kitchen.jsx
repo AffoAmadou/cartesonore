@@ -12,23 +12,22 @@ import { Lily } from '../objects/Lily'
 
 import { PositionalAudio } from '@react-three/drei'
 
-
 import { Chien } from '../objects/Chien'
-import sound from '../../../../public/sound/cuisine.mp3'
+import soundKitchen from '../../../../public/sound/cuisine_final.mp3'
 
 export const Kitchen = (props) => {
   const depthMaterial = useRef()
   const geometryRef = useRef()
   const meshSceneRef = useRef()
   const meshNavigationRef = useRef()
+  const soundref = useRef(null)
+
   const textureKitchen = useTexture('../../../../img/kitchen/kitchen.png')
   const textureDepthMapKitchen = useTexture('../../../../img/kitchen/kitchen_depthmap.png')
+  const textureArrowBack = useTexture('../../../../img/arrow-back.svg')
 
   const [isLily, setIsLily] = useState(false)
   const [isChien, setIsChien] = useState(false)
-  //const sounds =
-
-  const soundref = useRef(null)
 
   let textures = [textureKitchen, textureDepthMapKitchen]
 
@@ -37,9 +36,6 @@ export const Kitchen = (props) => {
     return texture
   })
 
-  let meshScale = new THREE.Vector3(0, 0, 1)
-
-  const set = useThree((state) => state.set)
   const state = useThree((state) => state)
 
   const { getCurrentViewport } = useThree((state) => state.viewport)
@@ -48,10 +44,8 @@ export const Kitchen = (props) => {
   useFrame((state) => (depthMaterial.current.uMouse = [state.pointer.x * 0.01, state.pointer.y * 0.01]))
 
   useEffect(() => {
-    let ang_rad = (state.camera.fov * Math.PI) / 180
-    let fov_y = state.camera.position.z * Math.tan(ang_rad / 2) * 1
-
     if (soundref.current) {
+      soundref.current.setVolume(0.3)
       soundref.current.play()
       console.log(soundref.current.buffer.duration)
 
@@ -63,6 +57,19 @@ export const Kitchen = (props) => {
         if (soundref.current) {
           soundref.current.stop()
           meshNavigationRef.current.material.opacity = 1
+          GSAP.fromTo(
+            meshNavigationRef.current.scale,
+            { x: 0.5, y: 0.5, z: 0.5 },
+            {
+              x: 1,
+              y: 1,
+              z: 1,
+              duration: 1,
+              repeat: -1,
+              yoyo: true,
+              ease: 'power2.out',
+            },
+          )
           console.log('stop')
         }
       }, time + 1000)
@@ -98,12 +105,9 @@ export const Kitchen = (props) => {
         duration: 1,
         ease: 'power2.out',
         onComplete: () => {
-
           setIsLily(true)
           setIsChien(true)
-
-
-        }
+        },
       },
     )
 
@@ -112,8 +116,16 @@ export const Kitchen = (props) => {
 
   return (
     <group>
-      <Lily position={[state.camera.position.x / 1.2, state.camera.position.y / .77, -0.5]} isLily={isLily} args={[0.16, 0.25, 64, 64]} />
-      <Chien position={[state.camera.position.x / 1.8, state.camera.position.y / .57, -0.8]} isChien={isChien} args={[0.17, 0.24, 64, 64]} />
+      <Lily
+        position={[state.camera.position.x / 1.2, state.camera.position.y / 0.77, -0.5]}
+        isLily={isLily}
+        args={[0.16, 0.25, 64, 64]}
+      />
+      <Chien
+        position={[state.camera.position.x / 1.8, state.camera.position.y / 0.57, -0.8]}
+        isChien={isChien}
+        args={[0.17, 0.24, 64, 64]}
+      />
       <mesh
         ref={meshNavigationRef}
         position={[state.camera.position.x / 1.6, state.camera.position.y / 1.9, -0.5]}
@@ -124,7 +136,7 @@ export const Kitchen = (props) => {
         scale={[1, 1, 1]}
       >
         <planeGeometry args={[0.05, 0.05, 24, 24]} />
-        <meshBasicMaterial opacity={0} color={0x00ffff} />
+        <meshBasicMaterial opacity={0} color={0xffffff} transparent map={textureArrowBack} />
       </mesh>
 
       <mesh ref={meshSceneRef} position={[state.camera.position.x, state.camera.position.y, -0.83]} scale={[1, 1, 1]}>
@@ -135,15 +147,9 @@ export const Kitchen = (props) => {
           uImage={textureKitchen}
           uDepthMap={textureDepthMapKitchen}
         />
-        <PositionalAudio url={sound} distance={10} ref={soundref} />
       </mesh>
 
-      <mesh rotation={[0, 0, 0.45]} scale={[0.3, 0.3, 0.3]} position={[-0.098, 0, 0.1]}>
-        <planeGeometry args={[7.48, 4.15, 64, 64]} />
-        <meshBasicMaterial color='#ff0000' opacity={0} transparent />
-      </mesh>
-
-      <PositionalAudio url={sound} distance={2} ref={soundref} />
+      <PositionalAudio url={soundKitchen} distance={1} ref={soundref} />
     </group>
   )
 }

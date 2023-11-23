@@ -16,7 +16,15 @@ export const Castle = (props) => {
   const handleHover = (e) => {
     if (props.scene2D) return
 
-    if (e.object.name === 'chambre1' || e.object.name === 'cuisine1') {
+    if (e.object.name === 'chambre1') {
+      if (props.isPathComplete[0]) return
+
+      props.setOutlineObject(e.object)
+    }
+
+    if (e.object.name === 'cuisine1') {
+      if (props.isPathComplete[1]) return
+
       props.setOutlineObject(e.object)
     }
   }
@@ -29,10 +37,13 @@ export const Castle = (props) => {
     if (props.scene2D) return
 
     if (focusRef.object.name === 'chambre1') {
+      if (props.isPathComplete[0]) return
+
       console.log('chambre1')
       props.setZoom(true)
       setSelectedObject(focusRef.object)
     } else if (focusRef.object.name === 'cuisine1') {
+      if (props.isPathComplete[1]) return
       console.log('cuisine1')
       props.setZoom(true)
       setSelectedObject(focusRef.object)
@@ -73,14 +84,17 @@ export const Castle = (props) => {
         if (props.zoom) {
           selectedObject.name === 'chambre1' ? props.setScene2D('bedroom') : props.setScene2D('kitchen')
 
-          if (selectedObject.name === 'chambre1') {
-            props.setIsPathComplete([true, props.isPathComplete[1]])
-            console.log('isPathc', props.isPathComplete)
-          }
-          else {
-            props.setIsPathComplete([props.isPathComplete[0], true])
-            console.log('isPathc', props.isPathComplete)
+          const updatedPaths = [...props.isPathComplete]
 
+          if (selectedObject.name === 'chambre1') {
+            updatedPaths[0] = true
+            props.setIsPathComplete(updatedPaths)
+
+            console.log('isPathc', props.isPathComplete)
+          } else {
+            updatedPaths[1] = true
+            props.setIsPathComplete(updatedPaths)
+            console.log('isPathc', props.isPathComplete)
           }
         }
       },

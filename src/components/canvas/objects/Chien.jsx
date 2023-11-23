@@ -3,7 +3,9 @@ import { useRef, useEffect, useState } from 'react'
 import chien from '../../../../public/img/chien.png'
 import { useLoader } from '@react-three/fiber'
 import { PositionalAudio } from '@react-three/drei'
-import sound from '../../../../public/sound/chien.mp3'
+
+import sound from '../../../../public/sound/dog-pant.mp3'
+
 import GSAP from 'gsap'
 
 //!Clouds
@@ -54,32 +56,16 @@ export const Chien = ({ position, isChien, args }) => {
 
   const playSound = () => {
     if (soundref.current) {
+      soundref.current.setVolume(5)
       soundref.current.play()
-      const animatable = { distance: soundref.current.distance }
-
-      // GSAP.fromTo(
-      //   animatable,
-      //   { distance: soundref.current.distance },
-      //   {
-      //     distance: 0.1,
-      //     duration: 6,
-      //     onUpdate: () => {
-      //       // soundref.current.distance = animatable.distance
-      //       // console.log('update', soundref.current.distance)
-      //     },
-      //     onComplete: () => {
-      //       soundref.current.stop()
-      //       // console.log('stop', soundref.current.distance)
-      //     },
-      //   },
-      // )
 
       let time = soundref.current.buffer.duration.toString().split('.')[0]
       time *= 1000
 
       setTimeout(() => {
         soundref.current.stop()
-      }, time)
+      }, time/2)
+
     }
   }
   return (

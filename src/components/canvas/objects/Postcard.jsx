@@ -29,10 +29,10 @@ export const Postcard = ({
   const [isClicked, setClicked] = useState(false)
 
   let texture = useLoader(THREE.TextureLoader, carte.src)
-  texture.colorSpace = THREE.LinearSRGBColorSpace
+  texture.colorSpace = THREE.SRGBColorSpace
 
   let texturetwo = useLoader(THREE.TextureLoader, intro.src)
-  texturetwo.colorSpace = THREE.LinearSRGBColorSpace
+  texturetwo.colorSpace = THREE.SRGBColorSpace
 
   useFrame(({ clock }) => {
     meshref.current.uTime = clock.getElapsedTime()
@@ -182,6 +182,7 @@ export const Postcard = ({
       onComplete: () => {
         // setIsStarted(true)
         if (soundref.current) {
+          soundref.current.setVolume(0.8)
           soundref.current.play()
           console.log(soundref.current.buffer.duration)
 
@@ -216,7 +217,6 @@ export const Postcard = ({
 
   //!HOVER EFFECT
   const handleHover = (e) => {
-    if (isClicked) return
     setOutlineObject(e.object)
   }
 
@@ -243,17 +243,19 @@ export const Postcard = ({
 
       <PositionalAudio url={sound} distance={100} ref={soundref} />
 
-      <mesh
-        rotation={[0, 0, 0.45]}
-        scale={[0.3, 0.3, 0.3]}
-        position={[-0.098, 0, 0.1]}
-        onPointerOut={handleNonHover}
-        onPointerOver={(e) => handleHover(e)}
-        onClick={handleClick}
-      >
-        <planeGeometry args={[7.48, 4.15, 64, 64]} />
-        <meshBasicMaterial color='#ff0000' opacity={0} transparent />
-      </mesh>
+      {!isClicked && (
+        <mesh
+          rotation={[0, 0, 0.45]}
+          scale={[0.3, 0.3, 0.3]}
+          position={[-0.098, 0, 0.1]}
+          onPointerOut={handleNonHover}
+          onPointerOver={(e) => handleHover(e)}
+          onClick={handleClick}
+        >
+          <planeGeometry args={[7.48, 4.15, 64, 64]} />
+          <meshBasicMaterial color='#ff0000' opacity={0} transparent />
+        </mesh>
+      )}
     </>
   )
 }

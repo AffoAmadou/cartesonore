@@ -12,8 +12,7 @@ import { PositionalAudio } from '@react-three/drei'
 import { Lily } from '../objects/Lily'
 import { Chien } from '../objects/Chien'
 
-import sound from '../../../../public/sound/chambre.mp3'
-
+import sound from '../../../../public/sound/chambre_final.mp3'
 
 export const Bedroom = (props) => {
   const depthMaterial = useRef()
@@ -21,15 +20,15 @@ export const Bedroom = (props) => {
   const meshSceneRef = useRef()
   const meshNavigationRef = useRef()
   const textureKitchen = useTexture('../../../../img/bedroom/bedroom.png')
-  const textureDepthMapKitchen = useTexture('../../../../img/bedroom/bedroom_depthmap.png')
-
+  const textureDepthMapBedroom = useTexture('../../../../img/bedroom/bedroom_depthmap.png')
+  const textureArrowBack = useTexture('../../../../img/arrow-back.svg')
 
   const [isLily, setIsLily] = useState(false)
   const [isChien, setIsChien] = useState(false)
 
   const soundref = useRef(null)
 
-  let textures = [textureKitchen, textureDepthMapKitchen]
+  let textures = [textureKitchen, textureDepthMapBedroom]
 
   textures = textures.map((texture) => {
     texture.colorSpace = THREE.SRGBColorSpace
@@ -52,7 +51,6 @@ export const Bedroom = (props) => {
     //!Gestion du son de la scene
     if (soundref.current) {
       soundref.current.play()
-      soundref.current.setRefDistance(2)
 
       console.log(soundref.current.buffer.duration)
 
@@ -64,6 +62,19 @@ export const Bedroom = (props) => {
         if (soundref.current) {
           soundref.current.stop()
           meshNavigationRef.current.material.opacity = 1
+          GSAP.fromTo(
+            meshNavigationRef.current.scale,
+            { x: 0.5, y: 0.5, z: 0.5 },
+            {
+              x: 1,
+              y: 1,
+              z: 1,
+              duration: 1,
+              repeat: -1,
+              yoyo: true,
+              ease: 'power2.out',
+            },
+          )
           console.log('stop')
         }
       }, time + 1000)
@@ -99,23 +110,28 @@ export const Bedroom = (props) => {
         duration: 1,
         ease: 'power2.out',
         onComplete: () => {
-
           setIsLily(true)
           setIsChien(true)
-
-
-        }
+        },
       },
     )
 
     props.timeline.add(scaleMeshScene, 0).add(scaleMeshNavigation, 1)
-  }, [])
+  }, [meshNavigationRef])
 
   return (
     <group>
-      <Lily position={[state.camera.position.x / .87, state.camera.position.y / .77, -0.5]} isLily={isLily} args={[0.16, 0.25, 64, 64]} />
+      <Lily
+        position={[state.camera.position.x / 0.87, state.camera.position.y / 0.77, -0.5]}
+        isLily={isLily}
+        args={[0.16, 0.25, 64, 64]}
+      />
 
-      <Chien position={[state.camera.position.x / 1.2, state.camera.position.y / .57, -0.5]} isChien={isChien} args={[0.17, 0.24, 64, 64]} />
+      <Chien
+        position={[state.camera.position.x / 1.2, state.camera.position.y / 0.57, -0.5]}
+        isChien={isChien}
+        args={[0.17, 0.24, 64, 64]}
+      />
       <mesh
         ref={meshNavigationRef}
         position={[state.camera.position.x / 0.728, state.camera.position.y / 4.6, -0.5]}
@@ -125,7 +141,7 @@ export const Bedroom = (props) => {
         }}
       >
         <planeGeometry args={[0.05, 0.05, 24, 24]} />
-        <meshBasicMaterial opacity={0} color={0x00ffff} />
+        <meshBasicMaterial opacity={0} color={0xffffff} transparent map={textureArrowBack} />
       </mesh>
 
       <mesh ref={meshSceneRef} position={[state.camera.position.x, state.camera.position.y, -0.83]}>
@@ -134,7 +150,7 @@ export const Bedroom = (props) => {
           ref={depthMaterial}
           attach='material'
           uImage={textureKitchen}
-          uDepthMap={textureDepthMapKitchen}
+          uDepthMap={textureDepthMapBedroom}
         />
         <PositionalAudio url={sound} distance={10} ref={soundref} />
       </mesh>

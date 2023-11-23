@@ -7,8 +7,6 @@ import { useRef, useEffect, useState } from 'react'
 import { PositionalAudio } from '@react-three/drei'
 import GSAP from 'gsap'
 
-import sound from '../../../public/sound/crow.mp3'
-
 import { Postcard } from './objects/Postcard'
 import { Sky } from './objects/Sky'
 import { Castle } from './objects/Castle'
@@ -218,7 +216,9 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted, paths, setPaths }) =
         )}
 
         {/* //Apparition Corbeau */}
+
         {isLastScene && <Corbeau position={[2, 0.65, 0]} setScene2D={setScene2D} />}
+
 
         {scene2D === 'crow' && (
           <Crow setPostScene={setPostScene} setIsLast={setIsLastScene} timeline={timeline} setScene2D={setScene2D} zoom={zoom} setZoom={setZoom} scene2D={scene2D} setPaths={setPaths} paths={paths} />
