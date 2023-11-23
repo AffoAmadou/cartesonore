@@ -14,7 +14,6 @@ import { Chien } from '../objects/Chien'
 
 import sound from '../../../../public/sound/chambre.mp3'
 
-
 export const Bedroom = (props) => {
   const depthMaterial = useRef()
   const geometryRef = useRef()
@@ -22,7 +21,6 @@ export const Bedroom = (props) => {
   const meshNavigationRef = useRef()
   const textureKitchen = useTexture('../../../../img/bedroom/bedroom.png')
   const textureDepthMapKitchen = useTexture('../../../../img/bedroom/bedroom_depthmap.png')
-
 
   const [isLily, setIsLily] = useState(false)
   const [isChien, setIsChien] = useState(false)
@@ -52,7 +50,6 @@ export const Bedroom = (props) => {
     //!Gestion du son de la scene
     if (soundref.current) {
       soundref.current.play()
-      soundref.current.setRefDistance(2)
 
       console.log(soundref.current.buffer.duration)
 
@@ -99,12 +96,9 @@ export const Bedroom = (props) => {
         duration: 1,
         ease: 'power2.out',
         onComplete: () => {
-
           setIsLily(true)
           setIsChien(true)
-
-
-        }
+        },
       },
     )
 
@@ -113,9 +107,17 @@ export const Bedroom = (props) => {
 
   return (
     <group>
-      <Lily position={[state.camera.position.x / .87, state.camera.position.y / .77, -0.5]} isLily={isLily} args={[0.16, 0.25, 64, 64]} />
+      <Lily
+        position={[state.camera.position.x / 0.87, state.camera.position.y / 0.77, -0.5]}
+        isLily={isLily}
+        args={[0.16, 0.25, 64, 64]}
+      />
 
-      <Chien position={[state.camera.position.x / 1.2, state.camera.position.y / .57, -0.5]} isChien={isChien} args={[0.17, 0.24, 64, 64]} />
+      <Chien
+        position={[state.camera.position.x / 1.2, state.camera.position.y / 0.57, -0.5]}
+        isChien={isChien}
+        args={[0.17, 0.24, 64, 64]}
+      />
       <mesh
         ref={meshNavigationRef}
         position={[state.camera.position.x / 0.728, state.camera.position.y / 4.6, -0.5]}

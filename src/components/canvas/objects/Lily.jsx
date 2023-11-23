@@ -15,6 +15,7 @@ export const Lily = ({ position, isLily, args }) => {
   const materialref = useRef(null)
   const meshref = useRef(null)
   const [opacity, setOpacity] = useState(0)
+  let soundProgress = 0
 
   useEffect(() => {
     if (isLily) {
@@ -55,24 +56,12 @@ export const Lily = ({ position, isLily, args }) => {
 
   const playSound = () => {
     if (soundref.current) {
+      soundref.current.setVolume(1)
       soundref.current.play()
-      console.log(soundref.current.buffer.duration)
-      const animatable = { distance: soundref.current.distance }
 
-      GSAP.fromTo(
-        animatable,
-        { distance: soundref.current.distance },
-        {
-          distance: 0.1,
-          duration: 6,
-          onUpdate: () => {
-            soundref.current.distance = animatable.distance
-          },
-          onComplete: () => {
-            soundref.current.stop()
-          },
-        },
-      )
+      setTimeout(() => {
+        soundref.current.stop()
+      }, 5000)
     }
   }
   return (

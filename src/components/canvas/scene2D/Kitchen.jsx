@@ -12,23 +12,39 @@ import { Lily } from '../objects/Lily'
 
 import { PositionalAudio } from '@react-three/drei'
 
-
 import { Chien } from '../objects/Chien'
-import sound from '../../../../public/sound/cuisine.mp3'
+import soundKitchen from '../../../../public/sound/cuisine.mp3'
+
+import soundBubblingCauldron from '../../../../public/sound/kitchen/bubbling-cauldron.mp3'
+import soundFoodSizzling from '../../../../public/sound/kitchen/food-sizzling.mp3'
+import soundSpatula from '../../../../public/sound/kitchen/moving-spatula.mp3'
+import soundOven from '../../../../public/sound/kitchen/oven.mp3'
 
 export const Kitchen = (props) => {
   const depthMaterial = useRef()
   const geometryRef = useRef()
   const meshSceneRef = useRef()
   const meshNavigationRef = useRef()
+  const soundref = useRef(null)
+  const soundBubblingCauldronRef = useRef(null)
+  const soundOvenRef = useRef(null)
+  const soundMovingSpatulaRef = useRef(null)
+  const soundFoodSizzlingRef = useRef(null)
+
   const textureKitchen = useTexture('../../../../img/kitchen/kitchen.png')
   const textureDepthMapKitchen = useTexture('../../../../img/kitchen/kitchen_depthmap.png')
 
   const [isLily, setIsLily] = useState(false)
   const [isChien, setIsChien] = useState(false)
-  //const sounds =
 
-  const soundref = useRef(null)
+  const sounds = [soundBubblingCauldron, soundFoodSizzling, soundSpatula, soundOven]
+
+  /*   const sounds = [
+    {
+      sound: soundBubblingCauldron,
+      position: [],
+    },
+  ] */
 
   let textures = [textureKitchen, textureDepthMapKitchen]
 
@@ -98,22 +114,65 @@ export const Kitchen = (props) => {
         duration: 1,
         ease: 'power2.out',
         onComplete: () => {
-
           setIsLily(true)
           setIsChien(true)
-
-
-        }
+        },
       },
     )
 
-    props.timeline.add(scaleMeshScene, 0).add(scaleMeshNavigation, 1)
+    const playSounds = () => {
+      if (soundBubblingCauldronRef.current) {
+        soundBubblingCauldronRef.current.play()
+      }
+
+      if (soundOvenRef.current) {
+        soundOvenRef.current.play()
+
+        setTimeout(() => {
+          soundOvenRef.current.stop()
+        }, 8000)
+      }
+
+      if (soundMovingSpatulaRef.current) {
+        soundMovingSpatulaRef.current.play()
+      }
+
+      if (soundFoodSizzlingRef.current) {
+        soundFoodSizzlingRef.current.play()
+      }
+    }
+
+    /* let moveSoundMovingSpatula = GSAP.utils.interpolate(
+      soundMovingSpatulaRef.current.position,
+      {
+        x: 0,
+        y: 0,
+        z: 0,
+      },
+      {
+        x: width,
+        y: height,
+        z: 1,
+        duration: 1,
+        ease: 'power2.out',
+      },
+    ) */
+
+    props.timeline.add(scaleMeshScene, 0).add(scaleMeshNavigation, 1).add(playSounds, 2)
   }, [])
 
   return (
     <group>
-      <Lily position={[state.camera.position.x / 1.2, state.camera.position.y / .77, -0.5]} isLily={isLily} args={[0.16, 0.25, 64, 64]} />
-      <Chien position={[state.camera.position.x / 1.8, state.camera.position.y / .57, -0.8]} isChien={isChien} args={[0.17, 0.24, 64, 64]} />
+      <Lily
+        position={[state.camera.position.x / 1.2, state.camera.position.y / 0.77, -0.5]}
+        isLily={isLily}
+        args={[0.16, 0.25, 64, 64]}
+      />
+      <Chien
+        position={[state.camera.position.x / 1.8, state.camera.position.y / 0.57, -0.8]}
+        isChien={isChien}
+        args={[0.17, 0.24, 64, 64]}
+      />
       <mesh
         ref={meshNavigationRef}
         position={[state.camera.position.x / 1.6, state.camera.position.y / 1.9, -0.5]}
@@ -135,7 +194,7 @@ export const Kitchen = (props) => {
           uImage={textureKitchen}
           uDepthMap={textureDepthMapKitchen}
         />
-        <PositionalAudio url={sound} distance={10} ref={soundref} />
+        {/* <PositionalAudio url={soundKitchen} distance={10} ref={soundref} /> */}
       </mesh>
 
       <mesh rotation={[0, 0, 0.45]} scale={[0.3, 0.3, 0.3]} position={[-0.098, 0, 0.1]}>
@@ -143,7 +202,21 @@ export const Kitchen = (props) => {
         <meshBasicMaterial color='#ff0000' opacity={0} transparent />
       </mesh>
 
-      <PositionalAudio url={sound} distance={2} ref={soundref} />
+      <mesh position={[0, 0, -7]}>
+        <PositionalAudio url={sounds[0]} distance={1} ref={soundBubblingCauldronRef} />
+      </mesh>
+
+      <mesh position={[-5, 0, 0]}>
+        <PositionalAudio url={sounds[3]} distance={3} ref={soundOvenRef} />
+      </mesh>
+
+      <mesh position={[2, 0, 0]}>
+        <PositionalAudio url={sounds[2]} distance={2} ref={soundMovingSpatulaRef} />
+      </mesh>
+
+      <mesh position={[-7, 2, 0]}>
+        <PositionalAudio url={sounds[1]} distance={2} ref={soundFoodSizzlingRef} />
+      </mesh>
     </group>
   )
 }
