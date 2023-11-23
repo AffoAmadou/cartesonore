@@ -78,8 +78,8 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
         {isCastle && (
           <>
             <Castle
-              scale={0.24}
-              position={[0, -2, -3]}
+              scale={0.34}
+              position={[0, -2, -3.7]}
               rotation={[0.0, 1.5, 0]}
               scene2D={scene2D}
               setScene2D={setScene2D}
@@ -93,7 +93,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
               isPathComplete={isPathComplete}
             />
             <Lily position={[0, -1.4, 0]} isLily={isLily} />
-            <Chien position={[-0.4, -1.4, -2.4]} isChien={isChien} />
+            <Chien position={[-0.5, -1.4, 0]} isChien={isChien} />
           </>
         )}
 
@@ -108,9 +108,9 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
         {/* //Apparition Nuages */}
         {firstClouds && (
           <>
-            <Cloud image='1' position={[-2.6, -2, 0]} size={{ width: 4, height: 2 }} />
-            <Cloud image='2' position={[0.1, -2.3, 0]} size={{ width: 3.3, height: 1.8 }} />
-            <Cloud image='0' position={[2, -1.6, 1]} size={{ width: 2.8, height: 1.6 }} />
+            <Cloud image='1' position={[-2.6, -1.7, 1]} size={{ width: 4, height: 2 }} />
+            <Cloud image='2' position={[0.1, -2.1, 1]} size={{ width: 3.3, height: 1.8 }} />
+            <Cloud image='0' position={[2.1, -1.7, 1]} size={{ width: 2.8, height: 1.6 }} />
           </>
         )}
         {/* Apparition nuages de fond  */}
@@ -122,7 +122,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
               isCastle={isCastle}
               second={true}
               image='2'
-              position={[-5, -2, -4]}
+              position={[-5, -2, -5]}
               size={{ width: 5.83, height: 3 }}
             />
             <Cloud
@@ -130,7 +130,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
               isCastle={isCastle}
               second={true}
               image='1'
-              position={[0, -1.4, -4]}
+              position={[0, -1.4, -5]}
               size={{ width: 6, height: 4 }}
             />
             <Cloud
@@ -138,7 +138,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
               isCastle={isCastle}
               second={true}
               image='0'
-              position={[5.4, -2, -4]}
+              position={[5.4, -2, -5]}
               size={{ width: 5.83, height: 3.8 }}
             />
             <Cloud
@@ -146,7 +146,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
               isCastle={isCastle}
               second={true}
               image='1'
-              position={[2.6, -0.65, -4.3]}
+              position={[2.6, -0.65, -5.3]}
               size={{ width: 7, height: 4 }}
             />
 

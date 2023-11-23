@@ -36,9 +36,9 @@ export const Chien = ({ position, isChien }) => {
     let tl = GSAP.timeline({})
     tl.to(e.object.scale, {
       duration: 0.5,
-      x: 1.2,
-      y: 1.2,
-      z: 1.2,
+      x: 0.9,
+      y: 0.9,
+      z: 0.9,
     })
   }
 
@@ -46,9 +46,9 @@ export const Chien = ({ position, isChien }) => {
     let tl = GSAP.timeline({})
     tl.to(meshref.current.scale, {
       duration: 0.5,
-      x: 1,
-      y: 1,
-      z: 1,
+      x: 0.8,
+      y: 0.8,
+      z: 0.8,
     })
   }
 
@@ -83,6 +83,7 @@ export const Chien = ({ position, isChien }) => {
         onPointerOut={handleNonHover}
         onPointerOver={(e) => handleHover(e)}
         onClick={playSound}
+        scale={[0.8, 0.8, 0.8]}
       >
         <planeGeometry args={[0.4, 0.6, 64, 64]} />
         <meshBasicMaterial opacity={1} ref={materialref} side={THREE.DoubleSide} transparent map={texture} />

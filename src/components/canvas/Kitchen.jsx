@@ -7,7 +7,6 @@ import { useEffect, useRef } from 'react'
 import { Pseudo3DShaderMaterial } from './Pseudo3DShaderMaterial'
 import GSAP from 'gsap'
 
-
 import { PositionalAudio } from '@react-three/drei'
 
 import sound from '../../../public/sound/cuisine.mp3'
@@ -20,8 +19,9 @@ export const Kitchen = (props) => {
   const textureKitchen = useTexture('../../../img/kitchen/kitchen.png')
   const textureDepthMapKitchen = useTexture('../../../img/kitchen/kitchen_depthmap.png')
 
-  const soundref = useRef(null)
+  //const sounds =
 
+  const soundref = useRef(null)
 
   let textures = [textureKitchen, textureDepthMapKitchen]
 
@@ -43,6 +43,11 @@ export const Kitchen = (props) => {
   useEffect(() => {
     let ang_rad = (state.camera.fov * Math.PI) / 180
     let fov_y = state.camera.position.z * Math.tan(ang_rad / 2) * 1
+
+    if (soundref.current) {
+      soundref.current.play()
+      console.log(soundref.current.buffer.duration)
+    }
 
     let scaleMeshScene = GSAP.fromTo(
       meshSceneRef.current.scale,
@@ -83,7 +88,7 @@ export const Kitchen = (props) => {
     <group>
       <mesh
         ref={meshNavigationRef}
-        position={[state.camera.position.x / 1.53, state.camera.position.y / 1.32, -0.5]}
+        position={[state.camera.position.x / 1.6, state.camera.position.y / 1.9, -0.5]}
         onPointerDown={() => {
           props.setScene2D(null)
           props.setZoom(false)
@@ -103,6 +108,13 @@ export const Kitchen = (props) => {
           uDepthMap={textureDepthMapKitchen}
         />
       </mesh>
+
+      <mesh rotation={[0, 0, 0.45]} scale={[0.3, 0.3, 0.3]} position={[-0.098, 0, 0.1]}>
+        <planeGeometry args={[7.48, 4.15, 64, 64]} />
+        <meshBasicMaterial color='#ff0000' opacity={0} transparent />
+      </mesh>
+
+      <PositionalAudio url={sound} distance={10} ref={soundref} />
     </group>
   )
 }

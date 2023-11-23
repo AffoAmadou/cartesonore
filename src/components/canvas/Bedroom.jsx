@@ -20,7 +20,6 @@ export const Bedroom = (props) => {
 
   const soundref = useRef(null)
 
-
   let textures = [textureKitchen, textureDepthMapKitchen]
 
   textures = textures.map((texture) => {
@@ -42,8 +41,7 @@ export const Bedroom = (props) => {
     let fov_y = state.camera.position.z * Math.tan(ang_rad / 2) * 1
 
     if (soundref.current) {
-
-      soundref.current.play();
+      soundref.current.play()
       console.log(soundref.current.buffer.duration)
     }
     let scaleMeshScene = GSAP.fromTo(
@@ -85,7 +83,7 @@ export const Bedroom = (props) => {
     <group>
       <mesh
         ref={meshNavigationRef}
-        position={[state.camera.position.x / 0.74, state.camera.position.y / 1.32, -0.5]}
+        position={[state.camera.position.x / 0.728, state.camera.position.y / 4.6, -0.5]}
         onPointerDown={() => {
           props.setScene2D(null)
           props.setZoom(false)
@@ -102,7 +100,6 @@ export const Bedroom = (props) => {
           attach='material'
           uImage={textureKitchen}
           uDepthMap={textureDepthMapKitchen}
-
         />
         <PositionalAudio url={sound} distance={10} ref={soundref} />
       </mesh>
