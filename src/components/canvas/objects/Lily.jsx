@@ -56,7 +56,7 @@ export const Lily = ({ position, isLily, args }) => {
 
   const playSound = () => {
     if (soundref.current) {
-      soundref.current.setVolume(1)
+      soundref.current.setVolume(0.5)
       soundref.current.play()
 
       setTimeout(() => {
@@ -73,7 +73,7 @@ export const Lily = ({ position, isLily, args }) => {
         onPointerOver={(e) => handleHover(e)}
         onClick={playSound}
       >
-        <planeGeometry args={[0.5, 0.8, 64, 64]} />
+        <planeGeometry args={args} />
         <meshBasicMaterial opacity={0} ref={materialref} side={THREE.DoubleSide} transparent map={texture} />
         <PositionalAudio url={sound} distance={10} ref={soundref} />
       </mesh>

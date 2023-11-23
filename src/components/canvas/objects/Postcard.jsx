@@ -182,6 +182,7 @@ export const Postcard = ({
       onComplete: () => {
         // setIsStarted(true)
         if (soundref.current) {
+          soundref.current.setVolume(0.8)
           soundref.current.play()
           console.log(soundref.current.buffer.duration)
 

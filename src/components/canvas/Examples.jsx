@@ -7,8 +7,6 @@ import { useRef, useEffect, useState } from 'react'
 import { PositionalAudio } from '@react-three/drei'
 import GSAP from 'gsap'
 
-import sound from '../../../public/sound/crow.mp3'
-
 import { Postcard } from './objects/Postcard'
 import { Sky } from './objects/Sky'
 import { Castle } from './objects/Castle'
@@ -37,7 +35,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
   const [isPostcard, setIsPostcard] = useState(true)
   const [isLily, setIsLily] = useState(false)
   const [isChien, setIsChien] = useState(false)
-  const [isPathComplete, setIsPathComplete] = useState([true, true])
+  const [isPathComplete, setIsPathComplete] = useState([false, false])
   const [isLastScene, setIsLastScene] = useState(false)
 
   const [outlineObject, setOutlineObject] = useState(null)
@@ -57,10 +55,10 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
   return (
     <>
       <group position={[0, 0, 0]}>
-        {isStarted && <Intro />}
+        {!isStarted && <Intro />}
 
         <Sky />
-        {/* 
+
         <EffectComposer multisampling={8} autoClear={false}>
           <Outline
             selection={outlineObject}
@@ -70,9 +68,9 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
             blur={true}
             kernelSize={KernelSize.SMALL}
           />
-        </EffectComposer> */}
+        </EffectComposer>
 
-        {!isPostcard && (
+        {isPostcard && (
           <Postcard
             isStarted={isStarted}
             isPlaying={isPlaying}
@@ -116,7 +114,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
         )}
 
         {/* //Apparition Nuages */}
-        {!firstClouds && (
+        {firstClouds && (
           <>
             <Cloud image='1' position={[-2.6, -1.7, 1]} size={{ width: 4, height: 2 }} />
             <Cloud image='2' position={[0.1, -2.1, 1]} size={{ width: 3.3, height: 1.8 }} />
@@ -124,7 +122,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
           </>
         )}
         {/* Apparition nuages de fond  */}
-        {!lastClouds && (
+        {lastClouds && (
           <>
             {/* middle*/}
             <Cloud
@@ -199,7 +197,9 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted }) => {
         )}
 
         {/* //Apparition Corbeau */}
-        {isPathComplete[0] && isPathComplete[1] && <Corbeau position={[2, 0.65, 0]} setScene2D={setScene2D} />}
+        {isPathComplete[0] && isPathComplete[1] && (
+          <Corbeau position={[2, 0.65, 0]} setScene2D={setScene2D} scene2D={scene2D} />
+        )}
 
         {scene2D === 'crow' && (
           <Crow timeline={timeline} setScene2D={setScene2D} zoom={zoom} setZoom={setZoom} scene2D={scene2D} />

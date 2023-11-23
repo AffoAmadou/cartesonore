@@ -54,7 +54,7 @@ export const Chien = ({ position, isChien, args }) => {
 
   const playSound = () => {
     if (soundref.current) {
-      soundref.current.setVolume(2)
+      soundref.current.setVolume(5)
       soundref.current.play()
 
       setTimeout(() => {
