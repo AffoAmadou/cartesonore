@@ -1,15 +1,14 @@
 import * as THREE from 'three'
 import { useRef, useEffect, useState } from 'react'
 import lily from '../../../../public/img/lily.png'
-import { useLoader } from '@react-three/fiber'
-import { PositionalAudio } from '@react-three/drei'
+import { PositionalAudio, useTexture } from '@react-three/drei'
 import sound from '../../../../public/sound/lily.mp3'
 import GSAP from 'gsap'
 
 //!Clouds
 export const Lily = ({ position, isLily, args }) => {
   const [isCreated, setIsCreated] = useState(false)
-  let texture = useLoader(THREE.TextureLoader, lily.src)
+  let texture = useTexture(lily.src)
   const [isHover, setIsHover] = useState(null)
   const soundref = useRef(null)
   const materialref = useRef(null)
@@ -67,7 +66,7 @@ export const Lily = ({ position, isLily, args }) => {
       setTimeout(() => {
         if (soundref.current)
           soundref.current.stop()
-      }, time/2)
+      }, time / 2)
     }
   }
   return (

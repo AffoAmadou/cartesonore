@@ -1,8 +1,7 @@
 import * as THREE from 'three'
 import { useRef, useEffect, useState } from 'react'
 import chien from '../../../../public/img/chien.png'
-import { useLoader } from '@react-three/fiber'
-import { PositionalAudio } from '@react-three/drei'
+import { PositionalAudio, useTexture } from '@react-three/drei'
 
 import sound from '../../../../public/sound/dog-pant.mp3'
 
@@ -11,7 +10,7 @@ import GSAP from 'gsap'
 //!Clouds
 export const Chien = ({ position, isChien, args }) => {
   const [isCreated, setIsCreated] = useState(false)
-  let texture = useLoader(THREE.TextureLoader, chien.src)
+  let texture = useTexture(chien.src)
   const soundref = useRef(null)
   const materialref = useRef(null)
   const meshref = useRef(null)

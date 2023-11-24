@@ -1,5 +1,5 @@
-import { useGLTF, shaderMaterial } from '@react-three/drei'
-import { useFrame, useLoader, extend } from '@react-three/fiber'
+import { useGLTF, shaderMaterial, useTexture } from '@react-three/drei'
+import { useFrame, extend } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useEffect, useRef, useState } from 'react'
 import boite from "../../../../public/img/boite.png"
@@ -17,13 +17,13 @@ export const Intro = () => {
   const voiceRef = useRef(null)
   const [isPlayed, setIsPlayed] = useState(false)
 
-  let texture = useLoader(THREE.TextureLoader, blanc.src)
+  let texture = useTexture(blanc.src)
   texture.colorSpace = THREE.LinearSRGBColorSpace;
 
-  let texturetwo = useLoader(THREE.TextureLoader, boite.src)
+  let texturetwo = useTexture(boite.src)
   texturetwo.colorSpace = THREE.LinearSRGBColorSpace;
 
-  let texturethree = useLoader(THREE.TextureLoader, disp.src)
+  let texturethree = useTexture(disp.src)
   texturethree.colorSpace = THREE.LinearSRGBColorSpace;
 
   let textures = [texture, texturetwo]

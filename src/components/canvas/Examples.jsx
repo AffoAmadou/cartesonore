@@ -1,7 +1,7 @@
 'use client'
 
 import { useGLTF, shaderMaterial, Stats } from '@react-three/drei'
-import { useFrame, useLoader, extend, useThree } from '@react-three/fiber'
+import { useFrame, extend, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useRef, useEffect, useState } from 'react'
 import { PositionalAudio } from '@react-three/drei'

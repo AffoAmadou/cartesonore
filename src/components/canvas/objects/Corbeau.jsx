@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { useRef, useEffect, useState } from 'react'
 import corbeau from '../../../../public/img/corbeau.png'
 import corbeauVolant from '../../../../public/img/corbeauVolant.png'
-import { useLoader } from '@react-three/fiber'
+import { useTexture } from '@react-three/fiber'
 import { PositionalAudio } from '@react-three/drei'
 import soundCrow from '../../../../public/sound/crow.mp3'
 import soundCrow2 from '../../../../public/sound/crow_2.mp3'
@@ -11,7 +11,7 @@ import GSAP from 'gsap'
 //!Clouds
 export const Corbeau = ({ position, setScene2D, scene2D }) => {
   const [isCreated, setIsCreated] = useState(false)
-  let texture = useLoader(THREE.TextureLoader, corbeauVolant.src)
+  let texture = useTexture(corbeauVolant.src)
   const [isHover, setIsHover] = useState(null)
   const soundCrowRef = useRef(null)
   const soundCrow2Ref = useRef(null)

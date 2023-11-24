@@ -6,7 +6,7 @@ import GSAP from 'gsap'
 import carte from '../../../../public/img/carte.png'
 import fin from '../../../../public/img/fin.png'
 
-import { PositionalAudio } from '@react-three/drei'
+import { PositionalAudio, useTexture } from '@react-three/drei'
 import sound from '../../../../public/sound/cartepostale.mp3'
 
 //!Postal card model
@@ -30,9 +30,9 @@ export const Postcard = ({
   const [isClicked, setClicked] = useState(false)
 
 
-  let texture = useLoader(THREE.TextureLoader, carte.src)
+  let texture = useTexture(carte.src)
   if (postScene) {
-    texture = useLoader(THREE.TextureLoader, fin.src)
+    texture = useTexture(fin.src)
   }
   texture.colorSpace = THREE.SRGBColorSpace
 
