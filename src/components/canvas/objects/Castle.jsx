@@ -1,42 +1,54 @@
 'use client'
 import * as THREE from 'three'
 import { useGLTF } from '@react-three/drei'
-import { EffectComposer, Outline } from '@react-three/postprocessing'
-import { KernelSize } from 'postprocessing'
 import { useEffect, useRef, useState } from 'react'
 import { useThree } from '@react-three/fiber'
 import GSAP from 'gsap'
+import { is } from '@react-spring/shared'
 
 //Castle model
 export const Castle = (props) => {
   const castleRef = useRef()
-  const ghostMesh = useRef()
   const { scene } = useGLTF('/castle_light.glb')
-  const [outlineObject, setOutlineObject] = useState(null)
   const [selectedObject, setSelectedObject] = useState(null)
-  const [zoom, setZoom] = useState(false)
   const positionVec = new THREE.Vector3(0, 0, 6)
-  const lookatVec = new THREE.Vector3(0, 0, 0)
 
   const handleHover = (e) => {
     if (props.scene2D) return
 
-    if (e.object.name === 'chambre1' || e.object.name === 'cuisine1') {
-      setOutlineObject(e.object)
+    if (e.object.name === 'chambre1') {
+      if (props.isPathComplete[0]) return
+
+      props.setOutlineObject(e.object)
+    }
+
+    if (e.object.name === 'cuisine1') {
+      if (props.isPathComplete[1]) return
+
+      props.setOutlineObject(e.object)
     }
   }
 
   const handleNonHover = () => {
-    setOutlineObject(null)
+    props.setOutlineObject(null)
   }
 
   const zoomToView = (focusRef) => {
     if (props.scene2D) return
 
-    if (focusRef.object.name === 'chambre1' || focusRef.object.name === 'cuisine1') {
+    if (focusRef.object.name === 'chambre1') {
+      if (props.isPathComplete[0]) return
+
+      console.log('chambre1')
+      props.setZoom(true)
+      setSelectedObject(focusRef.object)
+    } else if (focusRef.object.name === 'cuisine1') {
+      if (props.isPathComplete[1]) return
+      console.log('cuisine1')
       props.setZoom(true)
       setSelectedObject(focusRef.object)
     } else {
+      console.log('nope')
       props.setZoom(false)
       setSelectedObject(null)
       props.setScene2D(null)
@@ -47,11 +59,16 @@ export const Castle = (props) => {
 
   useEffect(() => {
     props.setIsLily(true)
+    props.setIsChien(true)
+
+    console.log('ispathComplete', props.isPathComplete)
+    console.log('setisPathComplete', props.setIsPathComplete)
+
     if (props.zoom) {
       if (selectedObject.name === 'chambre1') {
-        positionVec.set(-0.6, -0.3, 0)
+        positionVec.set(-0.83, -0.18, 0)
       } else {
-        positionVec.set(0.6, -0.6, 0)
+        positionVec.set(0.83, -0.3, 0)
       }
     } else {
       positionVec.set(0, 0, 6)
@@ -66,6 +83,19 @@ export const Castle = (props) => {
       onComplete: () => {
         if (props.zoom) {
           selectedObject.name === 'chambre1' ? props.setScene2D('bedroom') : props.setScene2D('kitchen')
+
+          const updatedPaths = [...props.isPathComplete]
+
+          if (selectedObject.name === 'chambre1') {
+            updatedPaths[0] = true
+            props.setIsPathComplete(updatedPaths)
+
+            console.log('isPathc', props.isPathComplete)
+          } else {
+            updatedPaths[1] = true
+            props.setIsPathComplete(updatedPaths)
+            console.log('isPathc', props.isPathComplete)
+          }
         }
       },
     })
@@ -75,16 +105,6 @@ export const Castle = (props) => {
 
   return (
     <>
-      <EffectComposer multisampling={8} autoClear={false}>
-        <Outline
-          selection={outlineObject}
-          edgeStrength={10.0}
-          visibleEdgeColor={0xffff00}
-          hiddenEdgeColor={0x101010}
-          blur={true}
-          kernelSize={KernelSize.SMALL}
-        />
-      </EffectComposer>
       <primitive
         ref={castleRef}
         object={scene}

@@ -1,5 +1,5 @@
 import { useGLTF, shaderMaterial, useTexture } from '@react-three/drei'
-import { useFrame, useLoader, extend } from '@react-three/fiber'
+import { useFrame, extend } from '@react-three/fiber'
 import * as THREE from 'three'
 
 import { useRef, useEffect, useState } from 'react'
@@ -13,9 +13,9 @@ import GSAP from 'gsap'
 //!Clouds
 export const Cloud = ({ image, position, size, second = false, setIsCastle = null, isCastle = null }) => {
   const [isCreated, setIsCreated] = useState(false)
-  let texture = useLoader(THREE.TextureLoader, nuage.src)
-  let texturetwo = useLoader(THREE.TextureLoader, nuage1.src)
-  let texturethree = useLoader(THREE.TextureLoader, nuage2.src)
+  let texture = useTexture(nuage.src)
+  let texturetwo = useTexture(nuage1.src)
+  let texturethree = useTexture(nuage2.src)
 
   let textures = [texture, texturetwo, texturethree]
 

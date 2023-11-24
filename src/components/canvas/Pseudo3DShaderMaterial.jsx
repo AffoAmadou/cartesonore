@@ -39,7 +39,7 @@ export const Pseudo3DShaderMaterial = shaderMaterial(
 
       vec2 parallax = (uMouse) * parallaxMult;
 
-      vec4 original = texture2D(uImage, (vUv + parallax * 1.5));
+      vec4 original = texture2D(uImage, (vUv + parallax * 2.5));
       gl_FragColor = linearTosRGB(original);
     }
   `,
