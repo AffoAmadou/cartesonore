@@ -1,5 +1,5 @@
 import { useGLTF, shaderMaterial } from '@react-three/drei'
-import { useFrame, useLoader, extend } from '@react-three/fiber'
+import { useFrame, extend } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useRef, useEffect, useState } from 'react'
 import GSAP from 'gsap'
@@ -28,11 +28,11 @@ export const Postcard = ({
   const [isFirstTime, setIsFirstTime] = useState(true)
   const soundref = useRef(null)
   const [isClicked, setClicked] = useState(false)
-
+  let texturefin = useTexture(fin.src)
 
   let texture = useTexture(carte.src)
   if (postScene) {
-    texture = useTexture(fin.src)
+    texture = texturefin
   }
   texture.colorSpace = THREE.SRGBColorSpace
 
