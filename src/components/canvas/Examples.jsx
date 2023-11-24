@@ -65,7 +65,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted, paths, setPaths }) =
 
   useEffect(() => {
     if (postScene) {
-      setCastlePosition([0, -2, -5.7])
+
     }
   }
     , [postScene])
@@ -97,6 +97,7 @@ export const Scene = ({ isStarted, isPlaying, setIsStarted, paths, setPaths }) =
             setIsCastle={setIsCastle}
             setIsPostcard={setIsPostcard}
             setOutlineObject={setOutlineObject}
+            postScene={postScene}
           />
         )}
 

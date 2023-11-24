@@ -23,19 +23,19 @@ export const Corbeau = ({ position, setScene2D, scene2D }) => {
   const animateCircle = () => {
     const radius = 3
     let angle = 0
+    if (meshCrowAnimated.current)
+      GSAP.to(meshCrowAnimated.current.position, {
+        duration: 1,
+        repeat: -1,
+        ease: 'none',
+        onUpdate: () => {
+          angle += 0.0055
 
-    GSAP.to(meshCrowAnimated.current.position, {
-      duration: 1,
-      repeat: -1,
-      ease: 'none',
-      onUpdate: () => {
-        angle += 0.0055
-
-        meshCrowAnimated.current.position.z = Math.cos(angle) * 6.5
-        meshCrowAnimated.current.position.x = Math.sin(angle) * radius
-        meshCrowAnimated.current.position.y = 0.5
-      },
-    })
+          meshCrowAnimated.current.position.z = Math.cos(angle) * 6.5
+          meshCrowAnimated.current.position.x = Math.sin(angle) * radius
+          meshCrowAnimated.current.position.y = 0.5
+        },
+      })
   }
 
   useEffect(() => {

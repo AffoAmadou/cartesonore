@@ -72,7 +72,7 @@ export const Kitchen = (props) => {
           )
           console.log('stop')
         }
-      }, time + 1000)
+      }, time / time)
     }
 
     let scaleMeshScene = GSAP.fromTo(

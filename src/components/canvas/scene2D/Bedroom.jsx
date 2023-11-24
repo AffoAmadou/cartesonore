@@ -77,7 +77,7 @@ export const Bedroom = (props) => {
           )
           console.log('stop')
         }
-      }, time + 1000)
+      }, time / time)
     }
 
     let scaleMeshScene = GSAP.fromTo(

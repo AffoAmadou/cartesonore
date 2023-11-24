@@ -8,11 +8,13 @@ import disp from "../../../../public/img/disp.jpg"
 import GSAP from 'gsap'
 import { PositionalAudio } from '@react-three/drei'
 import sound from '../../../../public/sound/intro.mp3'
+import voice from '../../../../public/sound/start.mp3'
 
 
 export const Intro = () => {
   const meshref = useRef(null)
   const soundref = useRef(null)
+  const voiceRef = useRef(null)
   const [isPlayed, setIsPlayed] = useState(false)
 
   let texture = useLoader(THREE.TextureLoader, blanc.src)
@@ -31,7 +33,7 @@ export const Intro = () => {
   });
 
   useEffect(() => {
-    if (soundref.current && !isPlayed) {
+    if (soundref.current && !isPlayed && voiceRef.current) {
       soundref.current.play()
       let time = soundref.current.buffer.duration.toString().split('.')[0]
       time *= 1000
@@ -40,6 +42,16 @@ export const Intro = () => {
         soundref.current.stop()
         setIsPlayed(true)
       }, time)
+
+
+      voiceRef.current.play()
+      let time2 = voiceRef.current.buffer.duration.toString().split('.')[0]
+      time2 *= 1000
+
+      setTimeout(() => {
+        voiceRef.current.stop()
+      }
+        , time2)
     }
     let tl = GSAP.timeline({
       ease: 'sin.inOut',
@@ -69,8 +81,18 @@ export const Intro = () => {
           url={sound}
           distance={1}
           ref={soundref}
+          setVolume={3}
           loopEnd={1}
         />
+
+        <PositionalAudio
+          url={voice}
+          distance={1}
+          ref={voiceRef}
+          setVolume={3}
+
+        />
+
       </mesh>
     </>
   )

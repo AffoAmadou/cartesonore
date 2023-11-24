@@ -63,8 +63,9 @@ export const Chien = ({ position, isChien, args }) => {
       time *= 1000
 
       setTimeout(() => {
-        soundref.current.stop()
-      }, time/2)
+        if (soundref.current)
+          soundref.current.stop()
+      }, time / 2)
 
     }
   }

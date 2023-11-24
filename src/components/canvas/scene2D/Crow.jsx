@@ -12,7 +12,6 @@ import finDex from '../../../../public/sound/finDex.mp3'
 import finTrois from '../../../../public/sound/victoire.mp3'
 import finQuatre from '../../../../public/sound/calin.mp3'
 
-
 import { PositionalAudio } from '@react-three/drei'
 
 export const Crow = ({ timeline, setIsLast, setScene2D, scene2D, setPaths, paths, setPostScene }) => {
@@ -30,6 +29,8 @@ export const Crow = ({ timeline, setIsLast, setScene2D, scene2D, setPaths, paths
   const calin = useTexture('../../../../img/calin.png')
   const win = useTexture('../../../../img/win.png')
   const soeur = useTexture('../../../../img/soeur.png')
+
+  const textureArrowBack = useTexture('../../../../img/arrow-back.svg')
 
   const sounds = [finUn, finDeux, finDex, finTrois, finQuatre]
 
@@ -179,7 +180,7 @@ export const Crow = ({ timeline, setIsLast, setScene2D, scene2D, setPaths, paths
         setIsBtnVisible(true)
         setSoundIndex(soundIndex + 1)
       }
-    }, time)
+    }, time / time)
   }
 
   return (
@@ -196,7 +197,7 @@ export const Crow = ({ timeline, setIsLast, setScene2D, scene2D, setPaths, paths
           }}
         >
           <planeGeometry args={[0.4, 0.4, 24, 24]} />
-          <meshBasicMaterial opacity={1} color={0x00ffff} />
+          <meshBasicMaterial opacity={1} color={0xffffff} map={textureArrowBack} transparent />
         </mesh>
       }
 

@@ -4,7 +4,7 @@ import * as THREE from 'three'
 import { useRef, useEffect, useState } from 'react'
 import GSAP from 'gsap'
 import carte from '../../../../public/img/carte.png'
-import intro from '../../../../public/img/intro.png'
+import fin from '../../../../public/img/fin.png'
 
 import { PositionalAudio } from '@react-three/drei'
 import sound from '../../../../public/sound/cartepostale.mp3'
@@ -20,6 +20,7 @@ export const Postcard = ({
   setIsCastle,
   setIsPostcard,
   setOutlineObject,
+  postScene
 }) => {
   const meshref = useRef(null)
   const materialref = useRef(null)
@@ -28,11 +29,14 @@ export const Postcard = ({
   const soundref = useRef(null)
   const [isClicked, setClicked] = useState(false)
 
+
   let texture = useLoader(THREE.TextureLoader, carte.src)
+  if (postScene) {
+    texture = useLoader(THREE.TextureLoader, fin.src)
+  }
   texture.colorSpace = THREE.SRGBColorSpace
 
-  let texturetwo = useLoader(THREE.TextureLoader, intro.src)
-  texturetwo.colorSpace = THREE.SRGBColorSpace
+
 
   useFrame(({ clock }) => {
     meshref.current.uTime = clock.getElapsedTime()
@@ -65,7 +69,15 @@ export const Postcard = ({
       setIsFirstTime(false)
     }
 
-    if (isStarted) {
+
+
+    if (postScene) {
+      console.log('post scene')
+      meshref.current.scale.set(1, 1, 1)
+      meshref.current.rotation.set(0, 0, 0)
+      meshref.current.position.set(0, 0, 0.1)
+    }
+    else if (!postScene && isStarted) {
       animateCard()
     }
   }, [isStarted])
@@ -209,7 +221,8 @@ export const Postcard = ({
                 },
               })
             }
-          }, time + 1000)
+          }, time / time)
+          // time + 1000
         }
       },
     })
@@ -236,7 +249,6 @@ export const Postcard = ({
           opacity={1}
           transparent
           uTextureOne={texture}
-          uTextureTwo={texturetwo}
           isStarted={isStarted}
         />
       </mesh>
