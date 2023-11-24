@@ -180,7 +180,7 @@ export const Crow = ({ timeline, setIsLast, setScene2D, scene2D, setPaths, paths
         setIsBtnVisible(true)
         setSoundIndex(soundIndex + 1)
       }
-    }, time / time)
+    }, time + 1000)
   }
 
   return (
@@ -189,7 +189,7 @@ export const Crow = ({ timeline, setIsLast, setScene2D, scene2D, setPaths, paths
         isBtnVisible &&
         <mesh
           ref={meshNavigationRef}
-          position={[-2.45, 1.1, 2]}
+          position={[-2.2, 1.1, 2]}
           onPointerDown={() => {
             // setScene2D(null)
 

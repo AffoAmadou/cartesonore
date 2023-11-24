@@ -80,7 +80,7 @@ export const Postcard = ({
     else if (!postScene && isStarted) {
       animateCard()
     }
-  }, [isStarted])
+  }, [isStarted, postScene])
 
   const animateCard = () => {
     let tl = GSAP.timeline({
@@ -221,7 +221,7 @@ export const Postcard = ({
                 },
               })
             }
-          }, time / time)
+          }, time + 1000)
           // time + 1000
         }
       },

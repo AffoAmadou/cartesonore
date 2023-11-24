@@ -51,7 +51,7 @@ export const Intro = () => {
       setTimeout(() => {
         voiceRef.current.stop()
       }
-        , time2)
+        , time2 / 2)
     }
     let tl = GSAP.timeline({
       ease: 'sin.inOut',

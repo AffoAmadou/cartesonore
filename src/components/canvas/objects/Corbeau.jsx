@@ -38,15 +38,15 @@ export const Corbeau = ({ position, setScene2D, scene2D }) => {
       })
   }
 
-  useEffect(() => {
-    if (scene2D) return
-    if (soundCrow2Ref.current) {
-      soundCrow2Ref.current.setVolume(5)
+  // useEffect(() => {
+  //   if (scene2D) return
+  //   if (soundCrow2Ref.current) {
+  //     soundCrow2Ref.current.setVolume(5)
 
-      soundCrow2Ref.current.play()
-      animateCircle()
-    }
-  }, [scene2D])
+  //     soundCrow2Ref.current.play()
+  //     animateCircle()
+  //   }
+  // }, [scene2D])
 
   //!HOVER EFFECT
   const handleHover = (e) => {
@@ -71,7 +71,7 @@ export const Corbeau = ({ position, setScene2D, scene2D }) => {
 
   const playSound = () => {
     if (soundCrowRef.current) {
-      soundCrow2Ref.current.stop()
+      // soundCrow2Ref.current.stop()
       soundCrowRef.current.play()
       const animatable = { distance: soundCrowRef.current.distance }
       let tl = GSAP.timeline({})
@@ -109,11 +109,11 @@ export const Corbeau = ({ position, setScene2D, scene2D }) => {
         <PositionalAudio url={soundCrow} distance={5} ref={soundCrowRef} loop />
       </mesh>
 
-      <mesh ref={meshCrowAnimated}>
+      {/* <mesh ref={meshCrowAnimated}>
         <planeGeometry args={[0.2, 0.2, 24, 24]} />
         <meshBasicMaterial color='#ff0000' opacity={0} transparent />
         <PositionalAudio url={soundCrow2} distance={3} ref={soundCrow2Ref} loop />
-      </mesh>
+      </mesh> */}
     </>
   )
 }

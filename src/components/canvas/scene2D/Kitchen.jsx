@@ -72,7 +72,7 @@ export const Kitchen = (props) => {
           )
           console.log('stop')
         }
-      }, time / time)
+      }, time + 1000)
     }
 
     let scaleMeshScene = GSAP.fromTo(
@@ -128,7 +128,7 @@ export const Kitchen = (props) => {
       />
       <mesh
         ref={meshNavigationRef}
-        position={[state.camera.position.x / 1.6, state.camera.position.y / 1.9, -0.5]}
+        position={[state.camera.position.x / 1.5, state.camera.position.y / 1.9, -0.5]}
         onPointerDown={() => {
           props.setScene2D(null)
           props.setZoom(false)
